@@ -1,0 +1,1 @@
+/Users/sammyalhashemi/Documents/random_colorscheme.vim/plugin/colorscheme.vim
