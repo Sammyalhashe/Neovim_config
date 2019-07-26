@@ -450,7 +450,7 @@ function! VisualSelection(direction, extra_filter) range
 endfunction
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if g:os == 'Dawrin'
+if g:os == 'Darwin'
     let g:python3_host_prog='/Library/Frameworks/Python.framework/Versions/3.6/bin/python3'
 else
     let g:python3_host_prog='/usr/bin/python'
