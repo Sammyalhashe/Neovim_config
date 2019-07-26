@@ -198,7 +198,7 @@ endif
 let g:random_disabled = 0
 let g:random_scheme = 0
 let g:environment_theme = 0
-let g:default_theme = 'material'
+let g:default_theme = 'NeoSolarized'
 "let g:default_theme = 'eink'
 let g:default_theme_airline = 'badwolf'
 let g:airline_integration = 0
@@ -206,6 +206,10 @@ let g:colorscheme_airline_correlation = 1
 let g:available_colorschemes = ["monotone","space-vim-dark", 'NeoSolarized', 'material', 'gruvbox', 'cobalt2', 'molokai']
 let g:available_airline_themes = ['atomic','violet', 'solarized_flood', 'material', 'gruvbox', 'cobalt2', 'molokai']
 let g:clearLineNr = 1
+
+if g:os == 'Linux'
+    colorscheme NeoSolarized
+endif
 
 
 " Set utf8 as standard encoding and en_US as the standard language
@@ -446,7 +450,11 @@ function! VisualSelection(direction, extra_filter) range
 endfunction
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-let g:python3_host_prog='/Library/Frameworks/Python.framework/Versions/3.6/bin/python3'
+if g:os == 'Dawrin'
+    let g:python3_host_prog='/Library/Frameworks/Python.framework/Versions/3.6/bin/python3'
+else
+    let g:python3_host_prog='/usr/bin/python'
+endif
 " Use K for show documentation in preview window
 inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"

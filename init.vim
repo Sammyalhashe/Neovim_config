@@ -9,10 +9,11 @@ if !exists("g:os")
     endif
 endif
 
+
 if g:os == 'Darwin'
     let g:config_location = "~/.config/nvim"
-elseif g:os == ''
-    echomsg("hi")
+elseif g:os == 'Linux'
+    let g:config_location = "~/.config/nvim"
 endif
 
 " Install Vim Plug if not installed
