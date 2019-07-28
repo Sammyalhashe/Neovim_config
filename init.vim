@@ -134,7 +134,7 @@ Plug 'heavenshell/vim-jsdoc'
 " Java Plugins
 
 "Typescript Plugins
-"Plug 'leafgarland/typescript-vim'
+Plug 'leafgarland/typescript-vim'
 "Plug 'mhartington/nvim-typescript', {'build': './install.sh'}
 
 call plug#end()

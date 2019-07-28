@@ -175,7 +175,11 @@ if has('termguicolors')
     set termguicolors
 endif
 
-set background=dark
+if g:os == 'Darwin'
+    set background=light
+else
+    set background=dark
+endif
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -198,7 +202,7 @@ endif
 let g:random_disabled = 0
 let g:random_scheme = 0
 let g:environment_theme = 0
-let g:default_theme = 'NeoSolarized'
+let g:default_theme = 'gruvbox'
 "let g:default_theme = 'eink'
 let g:default_theme_airline = 'badwolf'
 let g:airline_integration = 0
