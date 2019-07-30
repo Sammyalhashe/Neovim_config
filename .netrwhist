@@ -1,5 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_cnt =4
 let g:netrw_dirhist_1='/Users/sammyalhashemi/OneDrive/Code_Stuff/Website2'
 let g:netrw_dirhist_2='/Users/sammyalhashemi/.tmux'
 let g:netrw_dirhist_3='/Users/sammyalhashemi/Documents/GradleDemo/build'
+let g:netrw_dirhist_4='/Users/sammyalhashemi/go/src/github.com/Sammyalhashe/LinkParser/main'

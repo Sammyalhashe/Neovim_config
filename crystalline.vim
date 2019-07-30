@@ -54,7 +54,7 @@ let g:crystalline_tabline_fn = 'TabLine'
 let g:crystalline_enable_sep = 1
 
 if g:os == 'Darwin'
-    let g:crystalline_theme = 'gruvbox'
+    let g:crystalline_theme = 'dracula'
 else
     let g:crystalline_theme = 'dracula'
 endif
