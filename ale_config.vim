@@ -1,11 +1,3 @@
-
-let g:ale_linters = {
-            \   'javascript': ['eslint'],
-            \   'typescript': ['tslint', 'typescript-eslint-parser'],
-            \   'python': ['flake8'],
-            \   'go': ['go', 'golint', 'errcheck', 'gometalinter'],
-            \   'svelte': ['eslint']
-            \}
 let g:ale_sign_error = '●' " Less aggressive than the default '>>'
 let g:ale_sign_warning = '.'
 let g:ale_fixers = {

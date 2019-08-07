@@ -111,6 +111,7 @@ Plug 'kien/rainbow_parentheses.vim'
 Plug 'heavenshell/vim-pydocstring'
 
 "Markdown Plugins
+Plug 'tpope/vim-markdown'
 " Plug 'vim-pandoc/vim-pandoc'
 " Plug 'vim-pandoc/vim-pandoc-syntax'
 "Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }

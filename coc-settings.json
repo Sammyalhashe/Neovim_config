@@ -19,12 +19,5 @@
     "python.analysis.openFilesOnly": true,
     "python.formatting.provider": "yapf",
     "javascript.validate.enable": false,
-    "python.pythonPath": "/usr/local/bin/python3",
-    "languageserver": {
-        "metals": {
-          "command": "metals-vim",
-          "rootPatterns": ["build.sbt"],
-          "filetypes": ["scala", "sbt"]
-        }
-    }
+    "python.pythonPath": "/usr/local/bin/python3"
 }

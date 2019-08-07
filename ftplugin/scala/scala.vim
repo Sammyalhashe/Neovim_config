@@ -1,5 +1,5 @@
 function! ScalaRunner() abort
-!{node "%:p"}
+!{scala "%:p"}
 endfunction
 
 map <leader>r :call ScalaRunner()<CR>

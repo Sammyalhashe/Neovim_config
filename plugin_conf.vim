@@ -2,11 +2,11 @@
 " Improved Scrolling
 " Improve scroll, credits: https://github.com/Shougo
 "nnoremap <expr> zz (winline() == (winheight(0)+1) / 2) ?
-            "\ 'zt' : (winline() == 1) ? 'zb' : 'zz'
+		"\ 'zt' : (winline() == 1) ? 'zb' : 'zz'
 "noremap <expr> <C-f> max([winheight(0) - 2, 1])
-            "\ ."\<C-d>".(line('w$') >= line('$') ? "L" : "M")
+		"\ ."\<C-d>".(line('w$') >= line('$') ? "L" : "M")
 "noremap <expr> <C-b> max([winheight(0) - 2, 1])
-            "\ ."\<C-u>".(line('w0') <= 1 ? "H" : "M")
+		"\ ."\<C-u>".(line('w0') <= 1 ? "H" : "M")
 "noremap <expr> <C-e> (line("w$") >= line('$') ? "j" : "3\<C-e>")
 "noremap <expr> <C-y> (line("w0") <= 1         ? "k" : "3\<C-y>")
 
@@ -189,7 +189,7 @@ endif
 syntax enable
 
 let g:vim_monokai_tasty_italic = 1
-let g:material_theme_style = 'palenight'
+let g:material_theme_style = 'darker' " palenight
 let g:material_terminal_italics = 1
 let g:neosolarized_bold = 1
 let g:neosolarized_underline = 1
@@ -199,17 +199,19 @@ if $COLORTERM == 'gnome-terminal'
     set t_Co=256
 endif
 
-let g:random_disabled = 0
-let g:random_scheme = 0
-let g:environment_theme = 0
-let g:default_theme = 'material' " molokai
-" let g:default_theme = 'eink'
-let g:default_theme_airline = 'badwolf'
-let g:airline_integration = 0
-let g:colorscheme_airline_correlation = 1
-let g:available_colorschemes = ["monotone","space-vim-dark", 'NeoSolarized', 'material', 'gruvbox', 'cobalt2', 'molokai']
-let g:available_airline_themes = ['atomic','violet', 'solarized_flood', 'material', 'gruvbox', 'cobalt2', 'molokai']
-let g:clearLineNr = 1
+if g:os == 'Darwin'
+    let g:random_disabled = 0
+    let g:random_scheme = 0
+    let g:environment_theme = 0
+    let g:default_theme = 'space-vim-dark' " molokai
+    " let g:default_theme = 'eink'
+    let g:default_theme_airline = 'badwolf'
+    let g:airline_integration = 0
+    let g:colorscheme_airline_correlation = 1
+    let g:available_colorschemes = ["monotone","space-vim-dark", 'NeoSolarized', 'material', 'gruvbox', 'cobalt2', 'molokai']
+    let g:available_airline_themes = ['atomic','violet', 'solarized_flood', 'material', 'gruvbox', 'cobalt2', 'molokai']
+    let g:clearLineNr = 0
+endif
 
 if g:os == 'Linux'
     colorscheme NeoSolarized
@@ -681,27 +683,10 @@ let g:mta_filetypes = {
             \ 'jinja' : 1,
             \ 'javascript.jsx' : 1,
             \}
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-"highlight LineNr ctermfg=6 guifg=darkgrey
-highlight clear LineNr
-highlight clear SignColumn
-highlight LineNr guibg=NONE
-"highlight CursorLineNr ctermfg=6 guifg=white
-"highlight CursorLineNr cterm=underline 
-
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " Startify
 
-"let g:startify_custom_header = [
-            "\ '                                 ________  __ __        ',
-            "\ '            __                  /\_____  \/\ \\ \       ',
-            "\ '    __  __ /\_\    ___ ___      \/___//''/''\ \ \\ \    ',
-            "\ '   /\ \/\ \\/\ \ /'' __` __`\        /'' /''  \ \ \\ \_ ',
-            "\ '   \ \ \_/ |\ \ \/\ \/\ \/\ \      /'' /''__  \ \__ ,__\',
-            "\ '    \ \___/  \ \_\ \_\ \_\ \_\    /\_/ /\_\  \/_/\_\_/  ',
-            "\ '     \/__/    \/_/\/_/\/_/\/_/    \//  \/_/     \/_/    ',
-            "\ ]
 let g:startify_custom_header = [
             \ '                                ',
             \ '            __                  ',
@@ -753,17 +738,15 @@ let g:closetag_filenames = "*.html,*html+,*.xhtml,*.phtml,*.php,*.jsx,*.tsx,*.js
 " pydocstring
 nmap <silent> <c-o> <Plug>(pydocstring)
 
-"source ~/.config/nvim/check_clashes.vim
-
-
 augroup python
     autocmd!
     autocmd FileType python
-                \   syn keyword pythonSelf self:
+                \   syn keyword pythonSelf self
                 \ | highlight def link pythonSelf Special
 augroup end
 " set iskeyword+=:
 autocmd BufEnter,BufRead,BufNewFile *.py    set iskeyword-=:
+
 
 " {{JsDoc config
 exec printf("source %s/%s", g:config_location, "/jsdoc.vim")
