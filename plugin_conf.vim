@@ -771,3 +771,5 @@ exec printf("source %s/%s", g:config_location, "/jsdoc.vim")
 " }}
 
 exec printf('source %s/%s', "~/.config/nvim/", 'coc_config.vim')
+
+hi Normal guibg=NONE ctermbg=NONE

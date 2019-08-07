@@ -122,6 +122,10 @@ Plug 'elzr/vim-json'
 Plug 'alvan/vim-closetag'
 Plug 'digitaltoad/vim-pug'
 
+" Scala
+Plug 'derekwyatt/vim-scala'
+
+
 " CSS plugins
 
 "Javascript Plugins
