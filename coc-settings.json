@@ -19,5 +19,7 @@
     "python.analysis.openFilesOnly": true,
     "python.formatting.provider": "yapf",
     "javascript.validate.enable": false,
-    "python.pythonPath": "/usr/local/bin/python3"
+    "python.pythonPath": "/usr/local/bin/python3",
+    "java.errors.incompleteClasspath.severity": "ignore",
+    "java.format.settings.url": "/Users/sammyalhashemi/.config/coc/extensions/node_modules/redhat.java/eclipse-formatter.xml"
 }

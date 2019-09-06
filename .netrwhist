@@ -1,6 +1,8 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =4
-let g:netrw_dirhist_1='/Users/sammyalhashemi/OneDrive/Code_Stuff/Website2'
-let g:netrw_dirhist_2='/Users/sammyalhashemi/.tmux'
-let g:netrw_dirhist_3='/Users/sammyalhashemi/Documents/GradleDemo/build'
-let g:netrw_dirhist_4='/Users/sammyalhashemi/go/src/github.com/Sammyalhashe/LinkParser/main'
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/Users/sammyalhashemi/Documents/DepartmentStore/src/main/java/DepartmentStore'
+let g:netrw_dirhist_2='/Users/sammyalhashemi/Documents/DepartmentStore'
+let g:netrw_dirhist_3='/Users/sammyalhashemi/.tmux'
+let g:netrw_dirhist_4='/Users/sammyalhashemi/Documents/GradleDemo/src/main/java/GradgleDemo'
+let g:netrw_dirhist_5='/Users/sammyalhashemi/Documents/GradleDemo/src/main/java'
+let g:netrw_dirhist_6='/Users/sammyalhashemi/Documents/DepartmentStore'

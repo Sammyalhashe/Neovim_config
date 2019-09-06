@@ -62,8 +62,9 @@ Plug 'morhetz/gruvbox'
 Plug 'kaicataldo/material.vim'
 Plug 'herrbischoff/cobalt2.vim'
 Plug 'iCyMind/NeoSolarized'
+Plug 'Rigellute/rigel'
 " Plug 'Lokaltog/vim-monotone'
-Plug 'tomasr/molokai'
+" Plug 'tomasr/molokai'
 
 " Shuogo plugins -> vim user that makes nice plugins
 Plug 'Shougo/context_filetype.vim'
@@ -82,7 +83,7 @@ Plug 'sbdchd/neoformat'
 Plug 'tpope/vim-commentary'
 
 " nice looking opening for vim
-Plug 'mhinz/vim-startify'
+" Plug 'mhinz/vim-startify'
 
 " gitgutter for vim
 " Plug 'airblade/vim-gitgutter'

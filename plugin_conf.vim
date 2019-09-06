@@ -21,6 +21,9 @@ map gn :bn<cr>
 map gp :bp<cr>
 map gd :bd<cr>
 
+" tab switching
+map tn :tabn<cr>
+
 "set virtualedit=all
 set cursorline
 autocmd BufNewFile,BufRead *.py set cc=80
@@ -203,7 +206,7 @@ if g:os == 'Darwin'
     let g:random_disabled = 0
     let g:random_scheme = 0
     let g:environment_theme = 0
-    let g:default_theme = 'space-vim-dark' " molokai
+    let g:default_theme = 'space-vim-dark' " molokai space-vim-dark rigel
     " let g:default_theme = 'eink'
     let g:default_theme_airline = 'badwolf'
     let g:airline_integration = 0
@@ -457,7 +460,8 @@ endfunction
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if g:os == 'Darwin'
-    let g:python3_host_prog='/Library/Frameworks/Python.framework/Versions/3.6/bin/python3'
+    " let g:python3_host_prog='/Library/Frameworks/Python.framework/Versions/3.6/bin/python3'
+    let g:python3_host_prog='/usr/local/bin/python3'
 else
     let g:python3_host_prog='/usr/bin/python'
 endif
@@ -727,7 +731,7 @@ let g:startify_custom_header = [
             "\ ]                                                   
 
 let g:antigram = ['"A volunteer fireman" is an anagram for "I never run to a flame"']
-let g:startify_custom_header = g:startify_custom_header + startify#fortune#boxed() + g:antigram
+" let g:startify_custom_header = g:startify_custom_header + startify#fortune#boxed() + g:antigram
 
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
