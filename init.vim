@@ -12,8 +12,10 @@ endif
 
 if g:os == 'Darwin'
     let g:config_location = "~/.config/nvim"
+    let g:my_colorscheme = "onedark"
 elseif g:os == 'Linux'
     let g:config_location = "~/.config/nvim"
+    let g:my_colorscheme = "NeoSolarized"
 endif
 
 " Install Vim Plug if not installed
@@ -48,23 +50,21 @@ function! DoRemote(arg)
     UpdateRemotePlugins
 endfunction
 
+Plug 'vimlab/split-term.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'jpalardy/vim-slime'
 
 " Close the vim current buffer without ending the actual process -> :Bclose
 Plug 'rbgrouleff/bclose.vim'
 
-" Syntax Highlighting 
-" Plug 'sheerun/vim-polyglot'
-
 " Color schemes
-Plug 'patstockwell/vim-monokai-tasty'
-Plug 'liuchengxu/space-vim-dark'
+" Plug 'patstockwell/vim-monokai-tasty'
+Plug 'liuchengxu/space-vim-theme'
+Plug 'joshdick/onedark.vim'
+Plug 'arcticicestudio/nord-vim'
 Plug 'morhetz/gruvbox'
-Plug 'kaicataldo/material.vim'
-Plug 'herrbischoff/cobalt2.vim'
-Plug 'iCyMind/NeoSolarized'
-Plug 'Rigellute/rigel'
-" Plug 'Lokaltog/vim-monotone'
-" Plug 'tomasr/molokai'
+" Plug 'iCyMind/NeoSolarized'
+" Plug 'Rigellute/rigel'
 
 " Shuogo plugins -> vim user that makes nice plugins
 Plug 'Shougo/context_filetype.vim'
@@ -72,79 +72,65 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 
-" latex
-"Plug 'lervag/vimtex'
-
 "" formatting code
 Plug 'sbdchd/neoformat'
 
 " easy commenting of code -> mapped to <leader>cc
-" Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-commentary'
 
-" nice looking opening for vim
-" Plug 'mhinz/vim-startify'
-
 " gitgutter for vim
-" Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter'
 
 " Nerdtree related plugins
-Plug 'ctrlpvim/ctrlp.vim'
-" Plug 'ryanoasis/vim-devicons'
-" Plug 'scrooloose/nerdtree'
-" Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'ryanoasis/vim-devicons'
+Plug 'scrooloose/nerdtree'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 Plug 'tpope/vim-fugitive'
+
+" Build the extra binary if cargo exists on your system.
+" Plug 'liuchengxu/vim-clap'
+" Plug 'ctrlpvim/ctrlp.vim'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+
 " asynchrounous linting engine
 Plug 'w0rp/ale'
 
-" airline related plugins
-" Plug 'vim-airline/vim-airline'
-" Plug 'vim-airline/vim-airline-themes'
-
+" statusline
 Plug 'rbong/vim-crystalline'
 
 " auto pair brackets and other bracket related plugins
 Plug 'jiangmiao/auto-pairs'
+" Plug 'tmsvg/pear-tree'
 Plug 'kien/rainbow_parentheses.vim'
 
 "Python Plugins
-Plug 'heavenshell/vim-pydocstring'
+" Plug 'heavenshell/vim-pydocstring'
 
 "Markdown Plugins
 Plug 'tpope/vim-markdown'
-" Plug 'vim-pandoc/vim-pandoc'
-" Plug 'vim-pandoc/vim-pandoc-syntax'
-"Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 
 " JSON Plugins
 Plug 'elzr/vim-json'
 
 "HTML Plugins
 Plug 'alvan/vim-closetag'
-Plug 'digitaltoad/vim-pug'
-
-" CSS plugins
 
 "Javascript Plugins
-Plug 'mxw/vim-jsx'
+Plug 'seavan/vim-javascript-plus'
+Plug 'HerringtonDarkholme/yats.vim'
 Plug 'Quramy/vim-js-pretty-template'
 Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'Valloric/MatchTagAlways' " highlights matching html tags
 Plug 'heavenshell/vim-jsdoc'
 
-" Java Plugins
-
 "Typescript Plugins
 Plug 'leafgarland/typescript-vim'
-"Plug 'mhartington/nvim-typescript', {'build': './install.sh'}
-
 call plug#end()
 
 
-if exists('veonim')
-    source ~/.config/nvim/veonim.vim
-elseif has('nvim')
+if has('nvim')
     source ~/.config/nvim/plugin_conf.vim
 else
     source ~/.config/nvim/plugin_conf.vim

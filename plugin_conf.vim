@@ -12,7 +12,7 @@
 
 
 set nocompatible
-" set guicursor=
+" set guicursor=a:hor20-Cursor
 
 filetype plugin on
 
@@ -120,7 +120,7 @@ set ruler
 set cmdheight=2
 
 " A buffer becomes hidden when it is abandoned
-set hid
+set hidden
 
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
@@ -155,10 +155,8 @@ set novisualbell
 set t_vb=
 set tm=500
 
-
-" Add a bit extra margin to the left
-set foldcolumn=0
-"set foldmethod=syntax
+" folding
+exec printf("source %s/%s", g:config_location, "folding.vim")
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " set true colors
@@ -203,26 +201,16 @@ if $COLORTERM == 'gnome-terminal'
 endif
 
 if g:os == 'Darwin'
-    let g:random_disabled = 0
-    let g:random_scheme = 0
-    let g:environment_theme = 0
-    let g:default_theme = 'space-vim-dark' " molokai space-vim-dark rigel
-    " let g:default_theme = 'eink'
-    let g:default_theme_airline = 'badwolf'
-    let g:airline_integration = 0
-    let g:colorscheme_airline_correlation = 1
-    let g:available_colorschemes = ["monotone","space-vim-dark", 'NeoSolarized', 'material', 'gruvbox', 'cobalt2', 'molokai']
-    let g:available_airline_themes = ['atomic','violet', 'solarized_flood', 'material', 'gruvbox', 'cobalt2', 'molokai']
-    let g:clearLineNr = 0
+    exec printf("colorscheme %s", g:my_colorscheme)
 endif
 
 if g:os == 'Linux'
-    colorscheme NeoSolarized
+    exec printf("colorscheme %s", g:my_colorscheme)
 endif
 
 
 " Set utf8 as standard encoding and en_US as the standard language
-set encoding=utf8
+" set encoding=utf8
 
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
@@ -466,11 +454,6 @@ else
     let g:python3_host_prog='/usr/bin/python'
 endif
 " Use K for show documentation in preview window
-inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-"inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
-
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 exec printf("source %s/%s", g:config_location, "crystalline.vim")
@@ -507,7 +490,7 @@ au Syntax * RainbowParenthesesLoadBraces
 "autocmd StdinReadPre * let s:std_in=1
 "autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif " These lines open NT automatically if no file is specified
 
-" source ~/.config/nvim/nerdtree.vim
+source ~/.config/nvim/nerdtree.vim
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 "Typescript
@@ -609,7 +592,10 @@ set concealcursor=niv
 "let g:ctrlp_map = '<c-f>'
 "let g:ctrlp_cmd = 'CtrlP'
 
-exec printf("source %s/%s", g:config_location, "ctrlp.vim") 
+" exec printf("source %s/%s", g:config_location, "ctrlp.vim") 
+
+" fzf
+exec printf("source %s/%s", g:config_location, "fzf.vim") 
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " vim-markdown
@@ -621,12 +607,18 @@ set cmdheight=1
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 nnoremap <leader>nf :call Nf()<CR>
-autocmd BufWritePost * silent call Nf()
+" autocmd BufWritePost * silent call Nf()
+
+let g:neoformat_javascriptreact_prettier = {
+      \ 'exe': 'prettier',
+      \ 'args': ['--write'],
+      \ 'replace': 1
+      \ }
 
 function! Nf()
     if &filetype == 'python'
         :Neoformat yapf
-    elseif &filetype == 'javascript.jsx' || 'typescript'
+    elseif &filetype == 'javascriptreact' || 'typescript' || 'javascript'
         :Neoformat prettier
     else
         :Neoformat
@@ -757,4 +749,33 @@ exec printf("source %s/%s", g:config_location, "/jsdoc.vim")
 
 " }}
 
+
+" {{random_colorscheme config
+exec printf("source %s/%s", g:config_location, "/random_colorscheme_config.vim")
+
+" }}
+
+
+
 exec printf('source %s/%s', "~/.config/nvim/", 'coc_config.vim')
+
+exec printf("source %s/%s", g:config_location, "/vist.vim")
+
+" Scala config
+au BufRead,BufNewFile *.sbt set filetype=scala
+
+" set rendering behaviour for certain words
+" match Keyword /return\|while\|for\|do/
+" hi Function cterm=underline,bold gui=underline,bold
+" hi Keyword cterm=underline gui=underline
+hi Comment cterm=bold gui=bold
+hi String cterm=bold gui=bold
+
+" TermSplit config
+exec printf("source %s/%s", g:config_location, "/NeovimTerm.vim")
+
+
+" vim slime config
+exec printf("source %s/%s", g:config_location, "/slime.vim")
+
+" hi Normal guibg=NONE ctermbg=NONE

@@ -21,5 +21,19 @@
     "javascript.validate.enable": false,
     "python.pythonPath": "/usr/local/bin/python3",
     "java.errors.incompleteClasspath.severity": "ignore",
-    "java.format.settings.url": "/Users/sammyalhashemi/.config/coc/extensions/node_modules/redhat.java/eclipse-formatter.xml"
+    "java.format.settings.url": "/Users/sammyalhashemi/.config/coc/extensions/node_modules/redhat.java/eclipse-formatter.xml",
+    "languageserver": {
+        "metals": {
+            "command": "metals-vim",
+            "rootPatterns": ["build.sbt"],
+            "filetypes": ["scala", "sbt"]
+        },
+        "clangd": {
+            "command": "clangd",
+            "args": ["--background-index"],
+            "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".git/", ".hg/"],
+            "filetypes": ["c", "cpp", "objc", "objcpp", "ino"]
+        }
+    },
+    "coc.preferences.jumpCommand": "vsplit"
 }
