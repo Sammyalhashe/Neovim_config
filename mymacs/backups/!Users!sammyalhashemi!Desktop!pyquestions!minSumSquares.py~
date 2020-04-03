@@ -1,0 +1,40 @@
+from math import sqrt, floor
+
+
+def minSumSquares(n):
+    maxNum = 100000
+    limit = floor(sqrt(n))
+
+    # this stores the possible squares that are all smaller than n
+    s = [i**2 for i in range(1, limit + 1)]
+
+    N = [[0 for j in range(limit + 1)] for i in range(n + 1)]
+
+    # base cases
+    for i in range(n + 1):
+        N[i][0] = maxNum
+        for j in range(limit + 1):
+            N[0][j] = 0
+
+    # memoization
+    for i in range(1, n + 1):
+        for j in range(1, limit + 1):
+            if s[j - 1] > i or j - 1 == 0:
+                N[i][j] = N[i][j - 1]
+            else:
+                N[i][j] = min(N[i - s[j - 1]][j] + 1, N[i][j - 1])
+
+    return N[n][limit]
+
+
+if __name__ == "__main__":
+    tests = [
+        13,
+        100,
+        69,
+        27,
+    ]
+    for test in tests:
+        print(
+            "for number {0}, the minimum number of squared ints that sum to it is {1}".
+            format(test, minSumSquares(test)))

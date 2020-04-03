@@ -1,0 +1,111 @@
+"""
+I need to find the nth decibinary number is a list that is ordered
+by the following rules:
+    1) Increasing order of the decibinary's value in decimal base
+    2) Increasing order of the decibinary's decimal value ie. (2016)bd > (2000)bd
+
+If I was to do a brute force solution, then I would need to essentially
+query a very large list as multiple decibinary values can have the same
+decimal value.
+
+But let's be specific here, as the decibinary system uses 2 as the base with
+the digits themselves being the values you multiply by, let's consider by
+example.
+
+A value of 100 can at most go up to a base value of 2^6 = 64 (2^7 = 128).
+Specifically, the max base decibinary value can be (1000000)bd
+ => 1 * 2**6 + 0
+The value of 1 at the front cannot be any higher, or else we would have already
+eclipsed the 2^7 value. The remaining digits can be filled with whatever
+to bring 2^6 up to 100, which requires a total sum of 36 more.
+
+Although this is still large, we have restricted our search.
+
+The current code seems to work, but it is too inefficient. Possibly I can
+restrict my search
+
+"""
+
+
+def maxBinaryDigitsFor(n):
+    a = n
+    count = 0
+    while a > 0:
+        a = a // 2
+        count += 1
+    return count
+
+
+def calcDBVal(n):
+    if n > 0:
+        n = str(n)
+        res = 0
+        m = len(n) - 1
+        for i in range(m, -1, -1):
+            res += int(n[i]) * (2**(m - i))
+        return res
+    return 0
+
+
+# is there a limit of db number in terms of digits
+# such that it is less than or equal to being the xth number
+# that is, is there a limit to the number of digits a db number has
+# such that it is at most the xth number?
+# Well, for each db number that equals n, the first one must be n itself
+# ie. the first db number that equals (3)10 is (3)db
+def differentSol(x):
+    resMat = []
+    maxBin = maxBinaryDigitsFor(x)
+
+    passes = 9 * (2**maxBin) // 10
+
+    passCount = 1
+    for i in range(passes):
+        resMat.append(
+            [calcDBVal(j) for j in range(passCount * i, passCount * i + 10)])
+        passCount += 1
+    rowOn = 0
+    colOn = 1
+    xOn = 1
+
+    i, j = 0, 0
+    val = 0
+    print(resMat)
+    while xOn < x:
+        while colOn < 10:
+            break
+            if resMat[rowOn][colOn] != val:
+                pass
+        break
+
+
+def allDBValsEqualTo(n):
+    maxBin = maxBinaryDigitsFor(n)
+    minBin = maxBinaryDigitsFor(n - 1)
+
+    if minBin == maxBin:
+        a = n
+    else:
+        a = 2**minBin
+
+    base = (2**(maxBin + 1))
+    maxVal = n - base
+    while a < 9 * (2**(maxBin + 1)):
+        if (calcDBVal(a) == n):
+            yield a
+        a += 1
+
+
+def decibinaryNumbers(x):
+    res = []
+    for i in range(x):
+        res += allDBValsEqualTo(i)
+    return res[x - 1]
+
+
+if __name__ == "__main__":
+    test = 6
+    res = []
+    print(maxBinaryDigitsFor(test))
+    print(decibinaryNumbers(test))
+    differentSol(test)

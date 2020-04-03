@@ -1,0 +1,56 @@
+###############################################################################
+"""
+The point of the this code is to find the closest k points closest to a
+specified point and print out those points.
+
+Inputs:
+    P: (x, y) coordinates of specified point
+    pts: [(x, y)] -> array of points to check
+"""
+from math import sqrt
+from PyHeap import Heap as minHeap
+
+
+def closest_k(P, pts, k):
+    """closest_k
+    Finds the closest k number of points to the reference point P
+
+    :param P: x, y coordinates of P
+    :param pts: array of x, y coordinates
+    :param k: number of points to find
+    """
+    # init heap
+    heap = minHeap(key=lambda x: x[1])
+
+    # destructure reference point and refactor the points in terms of their
+    # distance from the reference point
+    xp, yp = P[0], P[1]
+    refactored = list(map(lambda x: (x, sqrt((x[0] - xp)**2 +
+                                             (x[1] - yp)**2)), pts))
+
+    # build the heap with the key being the distance
+    heap.buildHeap(refactored, key=lambda x: x[1])
+
+    # start the loop for the k points
+    i = 0
+    curr_size = heap.current_size
+    closest = []
+
+    # swap the top point and bottom point, grab the new bottom point
+    # re-heapify the heap again and reduce the current size to avoid the former
+    # smallest point
+    while i < k and curr_size != 0:
+        heap.swap(1, curr_size)
+        closest.append(heap.heap[curr_size][0])
+        curr_size -= 1
+        heap.satisfyMinHeapProperty(1, curr_size)
+        i += 1
+    return closest
+
+
+if __name__ == '__main__':
+    P = (1, 2)
+    pts = [(3, 4), (8, 9), (10, 2), (0.1, 2), (10, 5)]
+    k = 2
+    print(closest_k(P, pts, k))
+###############################################################################
