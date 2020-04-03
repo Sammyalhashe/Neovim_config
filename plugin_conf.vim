@@ -179,7 +179,7 @@ endif
 if g:os == 'Darwin'
     set background=dark
 else
-    set background=dark
+    set background=light
 endif
 
 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -778,4 +778,4 @@ exec printf("source %s/%s", g:config_location, "/NeovimTerm.vim")
 " vim slime config
 exec printf("source %s/%s", g:config_location, "/slime.vim")
 
-" hi Normal guibg=NONE ctermbg=NONE
+hi Normal guibg=NONE ctermbg=NONE

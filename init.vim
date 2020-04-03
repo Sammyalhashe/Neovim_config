@@ -12,7 +12,7 @@ endif
 
 if g:os == 'Darwin'
     let g:config_location = "~/.config/nvim"
-    let g:my_colorscheme = "onedark"
+    let g:my_colorscheme = "spacecamp"
 elseif g:os == 'Linux'
     let g:config_location = "~/.config/nvim"
     let g:my_colorscheme = "NeoSolarized"
@@ -50,6 +50,8 @@ function! DoRemote(arg)
     UpdateRemotePlugins
 endfunction
 
+Plug 'mhinz/vim-startify'
+
 Plug 'vimlab/split-term.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'jpalardy/vim-slime'
@@ -60,9 +62,10 @@ Plug 'rbgrouleff/bclose.vim'
 " Color schemes
 " Plug 'patstockwell/vim-monokai-tasty'
 Plug 'liuchengxu/space-vim-theme'
-Plug 'joshdick/onedark.vim'
+Plug 'rakr/vim-one'
 Plug 'arcticicestudio/nord-vim'
 Plug 'morhetz/gruvbox'
+Plug 'jaredgorski/spacecamp'
 " Plug 'iCyMind/NeoSolarized'
 " Plug 'Rigellute/rigel'
 

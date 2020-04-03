@@ -67,7 +67,7 @@ if g:os == 'Darwin'
     if g:my_colorscheme == "nord"
         let g:crystalline_theme = 'nord'
     else
-        let g:crystalline_theme = "onedark"
+        let g:crystalline_theme = "default"
     endif
 else
     let g:crystalline_theme = 'dracula'
