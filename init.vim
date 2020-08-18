@@ -1,6 +1,15 @@
-let $NVIM_COC_LOG_LEVEL = 'debug'
+" vim: foldmethod=marker
 
-" Set the os
+"====================================================================="
+"                  ______   _    _  _____  ______                     "
+"                 |  ___ \ | |  | |(_____)|  ___ \                    "
+"                 | |   | || |  | |   _   | | _ | |                   "
+"                 | |   | | \ \/ /   | |  | || || |                   "
+"                 | |   | |  \  /   _| |_ | || || |                   "
+"                 |_|   |_|   \/   (_____)|_||_||_| config            " 
+"====================================================================="
+
+" Set the os {{{1
 if !exists("g:os")
     if has("win64") || has("win32") || has("win16")
         let g:os = "Windows"
@@ -12,13 +21,14 @@ endif
 
 if g:os == 'Darwin'
     let g:config_location = "~/.config/nvim"
-    let g:my_colorscheme = "spacecamp"
+    let g:my_colorscheme = "gruvbox"
 elseif g:os == 'Linux'
     let g:config_location = "~/.config/nvim"
     let g:my_colorscheme = "NeoSolarized"
 endif
+" }}}
 
-" Install Vim Plug if not installed
+" Install Vim Plug if not installed {{{1
 if has('nvim')
     if empty(glob('~/.config/nvim/autoload/plug.vim'))
         silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
@@ -43,37 +53,25 @@ function! BuildComposer(info)
         endif
     endif
 endfunction
+" }}}
 
+" VimPlug Choices {{{1
 call plug#begin()
 
 function! DoRemote(arg)
     UpdateRemotePlugins
 endfunction
 
+" Miscellaneous Plugins {{{2
+Plug 'sakshamgupta05/vim-todo-highlight'
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'mhinz/vim-startify'
-
-Plug 'vimlab/split-term.vim'
+" Plug 'vimlab/split-term.vim'
 Plug 'junegunn/goyo.vim'
-Plug 'jpalardy/vim-slime'
+Plug 'triglav/vim-visual-increment'
 
 " Close the vim current buffer without ending the actual process -> :Bclose
 Plug 'rbgrouleff/bclose.vim'
-
-" Color schemes
-" Plug 'patstockwell/vim-monokai-tasty'
-Plug 'liuchengxu/space-vim-theme'
-Plug 'rakr/vim-one'
-Plug 'arcticicestudio/nord-vim'
-Plug 'morhetz/gruvbox'
-Plug 'jaredgorski/spacecamp'
-" Plug 'iCyMind/NeoSolarized'
-" Plug 'Rigellute/rigel'
-
-" Shuogo plugins -> vim user that makes nice plugins
-Plug 'Shougo/context_filetype.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
 
 "" formatting code
 Plug 'sbdchd/neoformat'
@@ -89,7 +87,9 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
+" Git client
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 
 " Build the extra binary if cargo exists on your system.
 " Plug 'liuchengxu/vim-clap'
@@ -99,42 +99,80 @@ Plug 'junegunn/fzf.vim'
 
 " asynchrounous linting engine
 Plug 'w0rp/ale'
+" Plug 'neomake/neomake'
 
 " statusline
 Plug 'rbong/vim-crystalline'
 
 " auto pair brackets and other bracket related plugins
 Plug 'jiangmiao/auto-pairs'
-" Plug 'tmsvg/pear-tree'
 Plug 'kien/rainbow_parentheses.vim'
 
-"Python Plugins
-" Plug 'heavenshell/vim-pydocstring'
+" }}}2
 
-"Markdown Plugins
+" Color schemes {{{2
+" Plug 'patstockwell/vim-monokai-tasty'
+Plug 'liuchengxu/space-vim-theme'
+Plug 'rakr/vim-one'
+Plug 'lifepillar/vim-solarized8'
+Plug 'vim-scripts/tango.vim'
+Plug 'vim-scripts/darktango.vim'
+Plug 'arcticicestudio/nord-vim'
+Plug 'morhetz/gruvbox'
+Plug 'jaredgorski/spacecamp'
+Plug 'jaredgorski/fogbell.vim'
+" Plug 'iCyMind/NeoSolarized'
+" Plug 'Rigellute/rigel'
+" }}}2
+
+" Shuogo plugins -> vim user that makes nice plugins {{{2
+Plug 'Shougo/context_filetype.vim'
+" }}}2
+
+" Autocomplete {{{2
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'Shougo/deoplete-lsp'
+" Plug 'neovim/nvim-lsp'
+" }}}2
+
+" Language plugins {{{2
+
+" Arduino {{{3
+Plug 'kingbin/vim-arduino'
+" }}}3
+
+" Python Plugins {{{3
+Plug 'heavenshell/vim-pydocstring', { 'do': 'make install' }
+" }}}3
+
+" Markdown Plugins {{{3
 Plug 'tpope/vim-markdown'
+" }}}3
 
-" JSON Plugins
-Plug 'elzr/vim-json'
-
-"HTML Plugins
+"HTML/CSS Plugins {{{3
 Plug 'alvan/vim-closetag'
+" }}}3
 
-"Javascript Plugins
+" Javascript Plugins {{{3
 Plug 'seavan/vim-javascript-plus'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'Quramy/vim-js-pretty-template'
 Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'Valloric/MatchTagAlways' " highlights matching html tags
 Plug 'heavenshell/vim-jsdoc'
+Plug 'elzr/vim-json'
+" }}}3
 
-"Typescript Plugins
+" Typescript Plugins {{{3
 Plug 'leafgarland/typescript-vim'
+" }}}3
+
+" }}}2
 call plug#end()
+" }}}1
 
 
-if has('nvim')
-    source ~/.config/nvim/plugin_conf.vim
-else
-    source ~/.config/nvim/plugin_conf.vim
-endif
+" Sourcing other files {{{1
+source ~/.config/nvim/plugin_conf.vim
+" }}}1

@@ -2,12 +2,8 @@
 
 " let g:crystalline_separators = ["\ue0b4", "\ue0b6"]
 " let g:crystalline_separators = ["\ue0ce", "\ue0b6"]
+let g:crystalline_separators = ["", ""]
 " let g:crystalline_separators = ["\ue0c0", "\ue0b6"]
-
-" {{ Get's the nearest method via vista.vim
-function! NearestMethodOrFunction() abort
-  return get(b:, 'vista_nearest_method_or_function', '')
-endfunction
 
 " {{ function to get status }}
 function! StatusDiagnostic() abort
@@ -34,11 +30,11 @@ function! StatusLine(current, width)
   endif
   let l:s .= ' %f%h%w%m%r '
   if a:current
-    let l:s .= crystalline#right_sep('', 'Fill') . ' %{fugitive#head()} '
+    let l:s .= '%{fugitive#head()} ' . crystalline#right_sep('', 'Fill') . coc#status()
   endif
 
   if a:current
-    let l:s .= crystalline#right_sep('', 'Fill') . ' %{coc#status()}%{StatusDiagnostic()} '
+    " let l:s .= crystalline#right_sep('', 'Fill') . luaeval(vim.lsp.buf.declaration())
   endif
   let l:s .= '%='
   if a:current
@@ -59,6 +55,8 @@ function! TabLine()
   return crystalline#bufferline(2, len(l:vimlabel), 1) . '%=%#CrystallineTab#' . crystalline#left_mode_sep('Fill') . l:vimlabel
 endfunction
 
+
+
 let g:crystalline_statusline_fn = 'StatusLine'
 let g:crystalline_tabline_fn = 'TabLine'
 let g:crystalline_enable_sep = 1
@@ -66,8 +64,12 @@ let g:crystalline_enable_sep = 1
 if g:os == 'Darwin'
     if g:my_colorscheme == "nord"
         let g:crystalline_theme = 'nord'
+    elseif g:my_colorscheme == "gruvbox"
+        let g:crystalline_theme = "gruvbox"
+    elseif g:my_colorscheme == "solarized8"
+        let g:crystalline_theme = "solarized"
     else
-        let g:crystalline_theme = "default"
+        let g:crystalline_theme = "dracula"
     endif
 else
     let g:crystalline_theme = 'dracula'

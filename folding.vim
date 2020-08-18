@@ -10,8 +10,8 @@ function! NeatFoldText()
 endfunction
 
 " toggle folds easier
-nnoremap <space> za
+" nnoremap <space> za
 
 set foldtext=NeatFoldText()
-set foldcolumn=2
+" set foldcolumn=2
 

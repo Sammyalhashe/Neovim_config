@@ -1,20 +1,12 @@
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" Improved Scrolling
-" Improve scroll, credits: https://github.com/Shougo
-"nnoremap <expr> zz (winline() == (winheight(0)+1) / 2) ?
-		"\ 'zt' : (winline() == 1) ? 'zb' : 'zz'
-"noremap <expr> <C-f> max([winheight(0) - 2, 1])
-		"\ ."\<C-d>".(line('w$') >= line('$') ? "L" : "M")
-"noremap <expr> <C-b> max([winheight(0) - 2, 1])
-		"\ ."\<C-u>".(line('w0') <= 1 ? "H" : "M")
-"noremap <expr> <C-e> (line("w$") >= line('$') ? "j" : "3\<C-e>")
-"noremap <expr> <C-y> (line("w0") <= 1         ? "k" : "3\<C-y>")
+" vim: foldmethod=marker
 
-
+" Defaults {{{1
 set nocompatible
-" set guicursor=a:hor20-Cursor
 
 filetype plugin on
+
+" terminal mode mappings
+tnoremap <Esc> <C-\><C-n>
 
 " buffer switching
 map gn :bn<cr>
@@ -34,7 +26,7 @@ set clipboard^=unnamed
 
 " Sets how many lines of history VIM has to remember
 set history=500
-set number relativenumber
+" set number relativenumber
 set showtabline=2       " Always show the tabs line
 
 " Start an external command with a single bang
@@ -43,13 +35,29 @@ nnoremap ! :!
 " mouse enable
 set mouse=a
 
-" With a map leader it's possible to do extra key combinations
+" With a map jeader it's possible to do extra key combinations
 " like <leader>w saves the current file
-let mapleader = ";"
-let maplocalleader="\<space>"
+let mapleader = "\\"
+let maplocalleader="\<Space>"
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+" Enable filetype plugins
+filetype plugin on
+filetype indent on
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" Set utf8 as standard encoding and en_US as the standard language
+set encoding=utf8
+
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
+
+
+" }}}1
+
+" My Dividers Helper {{{1
 " Look for placeholder <++>, go there delete it and start insert mode
 inoremap <leader>h <Esc>/<++><Enter>"_c4l
 " completely unindent the line for the python command to work
@@ -70,33 +78,12 @@ function! Dividers()
 endfunction
 
 nnoremap <c-x> :call Dividers() <Enter>
+" }}}1
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" Show highlight names under cursor
-nmap <silent> gh :echo 'hi<'.synIDattr(synID(line('.'), col('.'), 1), 'name')
-            \.'> trans<'.synIDattr(synID(line('.'), col('.'), 0), 'name').'> lo<'
-            \.synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name').'>'<CR>
-
-
-" Enable filetype plugins
-filetype plugin on
-filetype indent on
-
-" Set to auto read when a file is changed from the outside
-set autoread
-
-
-" :W sudo saves the file
-" (useful for handling the permission-denied error)
-" command W w !sudo tee % > /dev/null
-
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => VIM user interface
+" => VIM user interface {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Set 7 lines to the cursor - when moving vertically using j/k
-set so=7
+" set so=7
 
 " Avoid garbled characters in Chinese language windows OS
 let $LANG='en'
@@ -154,16 +141,17 @@ set noerrorbells
 set novisualbell
 set t_vb=
 set tm=500
+" }}}1
 
-" folding
+" folding {{{1
 exec printf("source %s/%s", g:config_location, "folding.vim")
+" }}}1
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" set true colors
+" set true colors {{{1
 
 if (has("nvim"))
     "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-    " let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 
 "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
@@ -182,9 +170,9 @@ else
     set background=light
 endif
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Colors and Fonts
+" }}}1
+
+" => Colors and Fonts {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
 syntax enable
@@ -208,28 +196,17 @@ if g:os == 'Linux'
     exec printf("colorscheme %s", g:my_colorscheme)
 endif
 
+let g:bg_tango = 1
+" }}}1
 
-" Set utf8 as standard encoding and en_US as the standard language
-" set encoding=utf8
-
-" Use Unix as the standard file type
-set ffs=unix,dos,mac
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Files, backups and undo
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Files, backups and undo {{{1
 " Turn backup off, since most stuff is in SVN, git et.c anyway...
 set nobackup
 set nowb
 set noswapfile
+" }}}1
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Text, tab and indent related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text, tab and indent related {{{1
 " Use spaces instead of tabs
 set expandtab
 
@@ -246,26 +223,17 @@ set tw=500
 
 set ai "Auto indent
 set si "Smart indent
-set wrap "Wrap lines
+set nowrap " don't Wrap lines
+" }}}1
 
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-""""""""""""""""""""""""""""""
-" => Visual mode related
-""""""""""""""""""""""""""""""
+" => Visual mode related {{{1
 " Visual mode pressing * or # searches for the current selection
 " Super useful! From an idea by Michael Naumann
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
+" }}}1
 
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Moving around, tabs, windows and buffers
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
-"map <space> /
-"map <c-space> ?
+" => Moving around, tabs, windows and buffers {{{1
 
 " Disable highlight when <leader><cr> is pressed
 map <silent> <leader><cr> :noh<cr>
@@ -314,38 +282,18 @@ endtry
 
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+" }}}1
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-""""""""""""""""""""""""""""""
-" => Status line
-""""""""""""""""""""""""""""""
-" Always show the status line
-"set laststatus=2
-
-" Format the status line
-"set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
-
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Editing mappings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Editing mappings {{{1
 " Remap VIM 0 to first non-blank character
 map 0 ^
 
 " Move a line of text using ALT+[jk] or Command+[jk] on mac
-nmap <M-j> mz:m+<cr>`z
-nmap <M-k> mz:m-2<cr>`z
-vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
-vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
-
-if has("mac") || has("macunix")
-    nmap <D-j> <M-j>
-    nmap <D-k> <M-k>
-    vmap <D-j> <M-j>
-    vmap <D-k> <M-k>
-endif
+" Note I found out these mappings by typing <option-j/k> in my terminal and copied the character
+nmap ∆ mz:m+<cr>`z
+nmap ˚ mz:m-2<cr>`z
+vmap ∆ :m'>+<cr>`<my`>mzgv`yo`z
+vmap ˚ :m'<-2<cr>`>my`<mzgv`yo`z
 
 " Delete trailing white space on save, useful for some filetypes ;)
 fun! CleanExtraSpaces()
@@ -357,14 +305,11 @@ fun! CleanExtraSpaces()
 endfun
 
 if has("autocmd")
-    autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
+    autocmd BufWritePre *.txt,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
 endif
+" }}}1
 
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Spell checking
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Spell checking {{{1
 " Pressing ,ss will toggle and untoggle spell checking
 map <leader>ss :setlocal spell!<cr>
 
@@ -373,29 +318,10 @@ map <leader>sn ]s
 map <leader>sp [s
 map <leader>sa zg
 map <leader>s? z=
+" }}}1
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" => Helper functions {{{1
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Misc
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Remove the Windows ^M - when the encodings gets messed up
-noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
-
-" Quickly open a buffer for scribble
-map <leader>q :e ~/buffer<cr>
-
-" Quickly open a markdown buffer for scribble
-map <leader>x :e ~/buffer.md<cr>
-
-" Toggle paste mode on and off
-map <leader>pp :setlocal paste!<cr>
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Helper functions
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Returns true if paste mode is enabled
 function! HasPaste()
     if &paste
@@ -445,21 +371,21 @@ function! VisualSelection(direction, extra_filter) range
     let @/ = l:pattern
     let @" = l:saved_reg
 endfunction
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" }}}1
 
+" python version {{{1
 if g:os == 'Darwin'
-    " let g:python3_host_prog='/Library/Frameworks/Python.framework/Versions/3.6/bin/python3'
     let g:python3_host_prog='/usr/local/bin/python3'
 else
     let g:python3_host_prog='/usr/bin/python'
 endif
-" Use K for show documentation in preview window
+" }}}1
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" Crystalline {{{1
 exec printf("source %s/%s", g:config_location, "crystalline.vim")
+" }}}1
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" Rainbow Parentheses
+" Rainbow Parentheses {{{1
 let g:rbpt_colorpairs = [
             \ ['brown',       'RoyalBlue3'],
             \ ['Darkblue',    'SeaGreen3'],
@@ -483,34 +409,18 @@ au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+" }}}1
 
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" NerdTree
-"autocmd StdinReadPre * let s:std_in=1
-"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif " These lines open NT automatically if no file is specified
-
+" NerdTree {{{1
 source ~/.config/nvim/nerdtree.vim
+" }}}1
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-"Typescript
-"let g:typescript_compiler_binary = 'tsc'
-"let g:typescript_compiler_options = ''
+"Typescript {{{1
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
+" }}}1
 
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-"YAPF
-autocmd FileType python nnoremap <LocalLeader>= :0,$!yapf<CR>
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-"Python Mode
-hi pythonSelf ctermfg=68  cterm=bold gui=bold
-
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" Vim Help
+" Vim Help {{{1
 " Snippets from vim-help
 " Credits: https://github.com/dahu/vim-help
 
@@ -532,7 +442,6 @@ setlocal iskeyword+=-
 
 wincmd L
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 " Jump to links with enter
 nmap <buffer> <CR> <C-]>
 
@@ -555,57 +464,37 @@ nmap <buffer> T h?\*\S\+\*<CR>l
 let &cpoptions = s:save_cpo
 " vim: set ts=2 sw=2 tw=80 noet :
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" Airblade
+" }}}1
+
+" Gitgutter {{{1
 let g:gitgutter_map_keys = 0
 let g:gitgutter_sh = $SHELL
 let g:gitgutter_sign_added = '┃'
 let g:gitgutter_sign_modified = '┃'
 let g:gitgutter_sign_removed = '━'
 let g:gitgutter_sign_modified_removed = '╋━'
+" }}}1
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-"neosnippet
-let g:neosnippet#enable_snipmate_compatibility = 1
-let g:neosnippet#enable_completed_snippet = 1
-let g:neosnippet#expand_word_boundary = 1
 " Plugin key-mappings.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-imap <expr><TAB>
-    \ pumvisible() ? "\<C-n>" :
-    \ neosnippet#expandable_or_jumpable() ?
-    \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-    \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+" ctrlp {{{1
+" exec printf("source %s/%s", g:config_location, "ctrlp.vim")
+" }}}1
 
-" conceal neosnippet markers
-set conceallevel=2
-set concealcursor=niv
-" autocmd MyAutoCmd InsertLeave * NeoSnippetClearMarkers
+" fzf {{{1
+exec printf("source %s/%s", g:config_location, "fzf.vim")
+" }}}1
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" ctrlp
-"let g:ctrlp_map = '<c-f>'
-"let g:ctrlp_cmd = 'CtrlP'
-
-" exec printf("source %s/%s", g:config_location, "ctrlp.vim") 
-
-" fzf
-exec printf("source %s/%s", g:config_location, "fzf.vim") 
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" vim-markdown
+" vim-markdown {{{1
 let g:vim_markdown_folding_disabled = 1
 let g:mkdp_auto_start = 1
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" echodoc config
-set cmdheight=1
+" }}}1
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" echodoc config {{{1
+set cmdheight=1
+" }}}1
+
+" Neoformat {{{1
 nnoremap <leader>nf :call Nf()<CR>
 " autocmd BufWritePost * silent call Nf()
 
@@ -633,32 +522,19 @@ function! s:NewFile(fp)
     execute "e " . expand("%:h") . "/" . a:fp
 endfunction
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 let g:neoformat_try_formatprg = 1
-"let g:neoformat_javascript_prettier = {
-"\ 'exe': 'prettier',
-"\ 'args': ['--tab-width', '4'],
-"\ 'stdin': 1,
-"\ 'valid_exit_codes': [0, 23],
-"\ }
+" }}}1
 
-"let g:neoformat_enabled_javascript = ['prettier']
+" ale | neomake {{{1
+" exec printf("source %s/%s", g:config_location, "neomake.vim")
+exec printf("source %s/%s", g:config_location, "ale_config.vim")
+" }}}1
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" ale
-
-exec printf("source %s/%s", g:config_location, "/ale_config.vim")
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" vim-jsx
-" let g:jsx_ext_required = 0
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" vim-jsx-pretty
+" vim-jsx-pretty {{{1
 let g:vim_jsx_pretty_colorful_config = 1
+" }}}1
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" vim-devicons
-" loading the plugin
+" vim-devicons {{{1
 let g:webdevicons_enable = 1
 " adding the flags to NERDTree
 "let g:webdevicons_enable_nerdtree = 1
@@ -668,10 +544,9 @@ let g:WebDevIconsOS = 'Darwin'
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {} " needed
 let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['class'] = '💎'
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+" }}}1
 
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" match tags always plugin
+" match tags always plugin {{{1
 let g:mta_filetypes = {
             \ 'html' : 1,
             \ 'xhtml' : 1,
@@ -679,9 +554,9 @@ let g:mta_filetypes = {
             \ 'jinja' : 1,
             \ 'javascript.jsx' : 1,
             \}
+" }}}1
 
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" Startify
+" Startify {{{1
 
 let g:startify_custom_header = [
             \ '                                ',
@@ -691,91 +566,45 @@ let g:startify_custom_header = [
             \ '   \ \ \_/ |\ \ \/\ \/\ \/\ \   ',
             \ '    \ \___/  \ \_\ \_\ \_\ \_\  ',
             \ '     \/__/    \/_/\/_/\/_/\/_/  ',
-            \ ]                      
-"let g:ascii = [      
-            "\ '                        /@                                    ',                                      
-            "\ '                      __/\/                                   ',                                      
-            "\ '       /==\      /  \_/\/                                     ',                                                           
-            "\ '     /======\    \/\__ \__                                    ',                                                           
-            "\ '   /==/\  /\==\    /\_|__ \                                   ',                                                           
-            "\ '/==/    ||    \=\ / / / /_/                                   ',                                                           
-            "\ '/    /\ || /\   \=\/ /                                        ',                                                           
-            "\ '   /   \||/   \   \===\                                       ',                                                           
-            "\ ' /_________________ \===\                                     ',                                                           
-            "\ ' |                /  \====\                                   ',                                                           
-            "\ ' |  _________    /  \   \===\    THE LEGEND OF                ',                                                                                    
-            "\ ' | /   /  \ / / /  __________\_____      ______       ___     ',                                                                                    
-            "\ ' |/   /____/ / /   \   _____ |\   /      \   _ \      \  \    ',                                                                                    
-            "\ '     /\   / / /     | |  /= \| | |        | | \ \     / _ \   ',                                                                                    
-            "\ '    /  \ / / /   /  | | /===/  | |        | |  \ \   / / \ \  ',                                                                                    
-            "\ '\\ /____/   /_\ //  | |_____/| | |        | |   | | / /___\ \ ',                                                                                    
-            "\ '\\\\\\\/   /////// /|  _____ | | |        | |   | | |  ___  | ',                                                                                    
-            "\ '  \\\\/ / //////   \| |/==/ \| | |        | |   | | | /   \ | ',                                                                                    
-            "\ ' _ \\/ / /////    _ | |==/     | |        | |  / /  | |   | | ',                                                                                    
-            "\ '/ \ / / ///      /|\| |_____/| | |_____/| | |_/ /   | |   | | ',                                                                                    
-            "\ '   / / /________/ |/_________|/_________|/_____/   /___\ /___\',                                                                                    
-            "\ '  /               | /==/                                      ',                                                           
-            "\ ' /________________|/=/    OCARINA OF TIME                     ',                                                           
-            "\ '=\     _____     /==/                                         ',                                    
-            "\ '                                                              ',               
-            "\ '                                                              ',               
-            "\ '                                                              ',               
-            "\ ]                                                   
+            \ ]
 
 let g:antigram = ['"A volunteer fireman" is an anagram for "I never run to a flame"']
-" let g:startify_custom_header = g:startify_custom_header + startify#fortune#boxed() + g:antigram
+let g:startify_custom_header = g:startify_custom_header + startify#fortune#boxed() + g:antigram
+" }}}1
 
-
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-" closetag
+" closetag {{{1
 let g:closetag_filenames = "*.html,*html+,*.xhtml,*.phtml,*.php,*.jsx,*.tsx,*.js"
-"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+" }}}1
 
-" pydocstring
+" pydocstring {{{1
 nmap <silent> <c-o> <Plug>(pydocstring)
+" }}}1
 
-augroup python
-    autocmd!
-    autocmd FileType python
-                \   syn keyword pythonSelf self
-                \ | highlight def link pythonSelf Special
-augroup end
-" set iskeyword+=:
-autocmd BufEnter,BufRead,BufNewFile *.py    set iskeyword-=:
-
-
-" {{JsDoc config
+" JsDoc config {{{1
 exec printf("source %s/%s", g:config_location, "/jsdoc.vim")
+" }}}1
 
-" }}
-
-
-" {{random_colorscheme config
+" random_colorscheme config {{{1
 exec printf("source %s/%s", g:config_location, "/random_colorscheme_config.vim")
+" }}}1
 
-" }}
-
-
-
+" coc config {{{1
 exec printf('source %s/%s', "~/.config/nvim/", 'coc_config.vim')
+" }}}1
 
-exec printf("source %s/%s", g:config_location, "/vist.vim")
+" highlighting config {{{1
+exec printf('source %s/%s', "~/.config/nvim/", 'highlighting.vim')
+" }}}1
 
-" Scala config
-au BufRead,BufNewFile *.sbt set filetype=scala
-
-" set rendering behaviour for certain words
-" match Keyword /return\|while\|for\|do/
-" hi Function cterm=underline,bold gui=underline,bold
-" hi Keyword cterm=underline gui=underline
-hi Comment cterm=bold gui=bold
-hi String cterm=bold gui=bold
-
-" TermSplit config
+" TermSplit config {{{1
 exec printf("source %s/%s", g:config_location, "/NeovimTerm.vim")
+" }}}1
 
+" vim-todo-highlight {{{1
+exec printf("source %s/%s", g:config_location, "/vim_todo_highlight.vim")
+" }}}1
 
-" vim slime config
-exec printf("source %s/%s", g:config_location, "/slime.vim")
+" agenda.vim {{{1
+exec printf("source %s/%s", g:config_location, "/agenda.vim")
+" }}}1
 
-hi Normal guibg=NONE ctermbg=NONE

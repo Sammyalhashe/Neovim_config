@@ -1,8 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =6
-let g:netrw_dirhist_1='/Users/sammyalhashemi/Documents/ToDoList/src/app/home/header'
-let g:netrw_dirhist_2='/Users/sammyalhashemi/Documents/ToDoList/src/app/home'
-let g:netrw_dirhist_3='/Users/sammyalhashemi/Desktop/gomod'
-let g:netrw_dirhist_4='/Users/sammyalhashemi/.kite'
-let g:netrw_dirhist_5='/Users/sammyalhashemi/Documents/TransmogrifAI/core/src/test/scala/com/salesforce/op/stages/impl/feature'
-let g:netrw_dirhist_6='/Users/sammyalhashemi/Documents/terminalWeb/pages'
+let g:netrw_dirhistcnt =5
+let g:netrw_dirhist_5='/Users/sammyalhashemi/Desktop/pyquestions/cpp'
+let g:netrw_dirhist_4='/Users/sammyalhashemi/Desktop/pyquestions/cpp/AVL'
+let g:netrw_dirhist_3='/Users/sammyalhashemi/Desktop/pyquestions/cpp'
+let g:netrw_dirhist_2='/Users/sammyalhashemi/Desktop/pyquestions/cpp/AVL'
+let g:netrw_dirhist_1='/Users/sammyalhashemi/Desktop/pyquestions/cpp'
