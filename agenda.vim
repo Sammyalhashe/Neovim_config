@@ -6,7 +6,8 @@ let g:expanded_default_agenda_dir = glob(g:default_agenda_dir)
 " TODO: add an 'ALL' option
 let g:TODO_DICT = {
     \ 1: 'TODO',
-    \ 2: 'DONE'
+    \ 2: 'DONE',
+    \ 3: "[TODO\|DONE\|NOTE\|OPTIMIZE\|FIXME]"
     \ }
 
 let g:COMMENT_TYPE = {
@@ -27,7 +28,7 @@ function! DeleteFile(...)
   endif
   let delStatus=delete(theFile)
   if(delStatus == 0)
-    echo "Deleted " . theFile
+    silent echo "Deleted " . theFile
   else
     echohl WarningMsg
     echo "Failed to delete " . theFile
@@ -36,10 +37,32 @@ function! DeleteFile(...)
   return delStatus
 endfunction
 
+" Creates a directory if it doesn't already exist
+function! CreateDirectoryIfNotExists(fp) abort
+    if (!isdirectory(a:fp) && exists('*mkdir')) 
+        call mkdir(a:fp, "p") " default protection bits 0755
+        echohl Identifier
+        echo "\n" . a:fp . " created successfully"
+    elseif !isdirectory(a:fp)
+        echohl WarningMsg
+        echo "\nUnable to create directory"
+    endif
+endfunction
+
+" Deletes a directory if it exists
+function DeleteDirectoryIfExists(fp) abort
+    if (isdirectory(a:fp)) 
+        call delete(a:fp, "d")
+        echohl Identifier
+        echo "\nSuccessfully deleted directory " . a:fp
+    else
+        echohl WarningMsg
+        echo "\nUnable to delete directory " . a:fp
+    endif
+endfunction
+
 " create the agenda folder if it doesn't exist
-" if (!isdirectory(g:default_agenda_dir) && exists('*mkdir'))
-"     call mkdir(g:default_agenda_dir)
-" endif
+call CreateDirectoryIfNotExists(g:default_agenda_dir)
 
 " Scan over the directory and recursively obtain filepaths
 function! GetAgendaFilesAt(startingDir) abort
@@ -60,6 +83,23 @@ function! GetAgendaFilesAt(startingDir) abort
         endfor
     endif
     return l:files
+endfunction
+
+" Scan over the directories and find all "Projects"
+function! GetProjectPaths(startingDir) abort
+    let l:dirContents = split(globpath(a:startingDir, '*'), '\n')
+    let l:dirs = []
+    if len(l:dirContents) > 0
+        for file in l:dirContents
+            if isdirectory(file)
+                " Add the current path
+                let l:dirs = add(l:dirs, file)
+                " Recursively find other options
+                let l:dirs = l:dirs + GetProjectPaths(file)
+            endif
+        endfor
+    endif
+    return l:dirs
 endfunction
 
 " get all the agenda files from the default directory
@@ -103,7 +143,6 @@ function! ReadAgenda(type) abort
 endfunction
 
 function! AppendProjectToFile(file, projectName, tasks) abort
-    echo a:projectName
     " add the comment that designates a specific project
     call writefile([g:COMMENT_TYPE['md'] . " " . a:projectName], a:file, "a")
     let l:tmpLines = []
@@ -118,11 +157,12 @@ function! AppendProjectToFile(file, projectName, tasks) abort
 endfunction
 
 " congregates requested agenda type in a buffer (or file?)
+" TODO: Figure out how to update the buffer if it is already open (maybe edit!)
 function! CongregateAgenda(type) abort
     let l:lines = ReadAgenda(a:type)
     let l:file = g:expanded_default_agenda_dir . g:default_agenda_file
     if (filereadable(l:file))
-        echo "delete " . l:file
+        silent echo "delete " . l:file
         call DeleteFile(l:file)
         call writefile([""], l:file)
     endif
@@ -132,9 +172,138 @@ function! CongregateAgenda(type) abort
     endfor
 endfunction
 
+" function to open a project file in a new buffer
+function! OpenFile(fp) abort
+    execute "rightbelow vsplit " . a:fp
+endfunction
+
 " function to open the agenda file in a new buffer
 function! OpenAgenda() abort
     execute "rightbelow vsplit " . g:expanded_default_agenda_dir . g:default_agenda_file
 endfunction
 
-nnoremap <leader>a :call CongregateAgenda(1)<CR>
+" Creates a Project Directory
+function! CreateAgendaProject() abort
+    call inputsave()
+    let l:fName = input("Enter the project name: ")
+    call inputrestore()
+    let l:expandedName = g:expanded_default_agenda_dir . l:fName
+    call CreateDirectoryIfNotExists(l:expandedName)
+endfunction
+
+" DONE: function to split by '/' and add a '&' to the last word
+" TODO: May have to modify this so that it supports more projects
+" NOTE: Thinking about finding a way to add extra characters in front
+"       Ie. (a)Sammy (b)Test ... (aa)asdf (ab)qwer
+function SplitAndAddCharToLast(toSplit, separator, charToAdd, chosen) abort
+    let l:haveSplit = split(a:toSplit, a:separator)
+    let l:lchosen = l:haveSplit[-1][0]
+    let l:idx = 0
+    while match(l:lchosen, "[&\|,\|/\|\]") != -1 || (l:idx + 1 < len(l:haveSplit[-1]) && index(a:chosen, l:lchosen) >= 0)
+        let l:idx = l:idx + 1
+        let l:lchosen = l:haveSplit[-1][l:idx]
+    endwhile
+    call add(a:chosen, l:lchosen) " add the chosen char
+
+    let l:haveSplit[-1] = (idx == 0 ? '' : l:haveSplit[-1][: idx - 1]) . "&" . l:haveSplit[-1][idx:]
+    return join(l:haveSplit, "/")
+endfunction
+
+" Adds Subproject to Project
+function! AddSubModule() abort
+    let l:lettersChosen = []
+    " DONE: grab the projects and separate them by newLines 
+    let l:projectPaths = GetProjectPaths(g:expanded_default_agenda_dir)
+    let l:copy = copy(l:projectPaths)
+    let l:subs = map(l:projectPaths, 'substitute(v:val, g:expanded_default_agenda_dir, "", "")')
+    " NOTE: add Cancel option
+    call add(l:subs, "Cancel")
+    " TODO: add '&' to word after the last '/'
+    let l:subs = map(l:subs, {_, val -> SplitAndAddCharToLast(val, "/", "&", l:lettersChosen)})
+    let l:shortenedProjectPaths = join(l:subs, "\n")
+    let l:projectIdx = confirm("Enter the project to edit: ", l:shortenedProjectPaths, "Question")
+    if l:projectIdx == len(l:subs)
+        echohl WarningMsg
+        echo "Cancelled"
+        return
+    endif
+    let l:projectPathChosen = l:copy[l:projectIdx - 1]
+    call inputsave()
+    let l:subModuleName = input("Enter submodule name: ")
+    call CreateDirectoryIfNotExists(l:projectPathChosen . "/" . l:subModuleName)
+    call inputrestore()
+endfunction
+
+function! EditProject() abort
+    let l:lettersChosen = []
+    " DONE: grab the projects and separate them by newLines 
+    let l:projectPaths = GetProjectPaths(g:expanded_default_agenda_dir)
+    let l:copy = copy(l:projectPaths)
+    let l:subs = map(l:projectPaths, 'substitute(v:val, g:expanded_default_agenda_dir, "", "")')
+    " NOTE: add Cancel option
+    call add(l:subs, "Cancel")
+    " TODO: add '&' to word after the last '/'
+    let l:subs = map(l:subs, {_, val -> SplitAndAddCharToLast(val, "/", "&", l:lettersChosen)})
+    let l:shortenedProjectPaths = join(l:subs, "\n")
+    let l:projectIdx = confirm("Enter the project to edit: ", l:shortenedProjectPaths, "Question")
+    if l:projectIdx == len(l:subs)
+        echohl WarningMsg
+        echo "Cancelled"
+        return
+    endif
+    let l:projectPathChosen = l:copy[l:projectIdx - 1]
+    let l:projectFiles = GetAgendaFilesAt(l:projectPathChosen)
+    let l:copy2 = copy(l:projectFiles)
+    let l:fileNames = map(l:projectFiles, 'substitute(v:val, g:expanded_default_agenda_dir, "", "")')
+    echo l:fileNames
+    " NOTE: add Cancel option
+    call add(l:fileNames, "Cancel")
+    let l:lettersChosen = []
+    let l:fileNames = map(l:fileNames, {_, val -> SplitAndAddCharToLast(val, "/", "&", l:lettersChosen)})
+    let l:shortenedFilePaths = join(l:fileNames, "\n")
+    let l:fileIdx = confirm("Enter the file to edit: ", l:shortenedFilePaths, "Question")
+    if l:fileIdx == len(l:fileNames)
+        echohl WarningMsg
+        echo "Cancelled"
+        return
+    endif
+    let l:filePathChosen = l:copy2[l:fileIdx - 1]
+    call OpenFile(l:filePathChosen)
+endfunction
+
+" Delete project from Agenda and ask for confirmation
+function! DeleteProject() abort
+    let l:lettersChosen = []
+    " DONE: grab the projects and separate them by newLines 
+    let l:projectPaths = GetProjectPaths(g:expanded_default_agenda_dir)
+    let l:copy = copy(l:projectPaths)
+    let l:subs = map(l:projectPaths, 'substitute(v:val, g:expanded_default_agenda_dir, "", "")')
+    " NOTE: add Cancel option
+    call add(l:subs, "Cancel")
+    " TODO: add '&' to word after the last '/'
+    let l:subs = map(l:subs, {_, val -> SplitAndAddCharToLast(val, "/", "&", l:lettersChosen)})
+    let l:shortenedProjectPaths = join(l:subs, "\n")
+    let l:projectIdx = confirm("Enter the project to delete: ", l:shortenedProjectPaths, "Question")
+
+    if l:projectIdx == len(l:subs)
+        echohl WarningMsg
+        echo "Cancelled"
+        return
+    endif
+
+    let l:projectPathChosen = l:copy[l:projectIdx - 1]
+    let l:idx = confirm("Are you sure?: ", "&Yes\n&No", "Question")
+    if l:idx == 1
+        call DeleteDirectoryIfExists(l:projectPathChosen)
+    elseif l:idx == 2
+        echohl WarningMsg
+        echo "Cancelled"
+    endif
+endfunction
+
+
+autocmd BufWritePost * call CongregateAgenda(1)
+command! -nargs=0 OpenAgenda call OpenAgenda()
+command! -nargs=0 DeleteProject call DeleteProject()
+command! -nargs=0 EditProject call EditProject()
+command! -nargs=0 AddSubModule call AddSubModule()
