@@ -255,7 +255,6 @@ function! EditProject() abort
     let l:projectFiles = GetAgendaFilesAt(l:projectPathChosen)
     let l:copy2 = copy(l:projectFiles)
     let l:fileNames = map(l:projectFiles, 'substitute(v:val, g:expanded_default_agenda_dir, "", "")')
-    echo l:fileNames
     " NOTE: add Cancel option
     call add(l:fileNames, "Cancel")
     let l:lettersChosen = []
