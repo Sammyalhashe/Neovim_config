@@ -376,6 +376,7 @@ endfunction
 
 autocmd BufWritePost * call CongregateAgenda(1)
 command! -nargs=0 OpenAgenda call OpenAgenda()
+command! -nargs=0 CreateProject call CreateAgendaProject()
 command! -nargs=0 DeleteProject call DeleteProject()
 command! -nargs=0 EditProject call EditProject()
 command! -nargs=0 AddSubModule call AddSubModule()
