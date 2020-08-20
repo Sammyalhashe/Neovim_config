@@ -62,10 +62,24 @@ function! CreateFileIfNotExists(fp) abort
     echo "Not Created"
 endfunction
 
+function! DeleteDirectoryContents(fp) abort
+    let l:dirContents = split(globpath(a:fp, '*'), '\n')
+    for dirContent in l:dirContents
+        if isdirectory(dirContent)
+            " Delete directory contents before the directory itself
+            " Otherwise delete will not work
+            call DeleteDirectoryContents(dirContent)
+            call delete(dirContent, "d")
+        else
+            call delete(dirContent)
+        endif
+    endfor
+endfunction
+
 " Deletes a directory if it exists
-function DeleteDirectoryIfExists(fp) abort
+function! DeleteDirectoryIfExists(fp) abort
     if (isdirectory(a:fp)) 
-        call delete(a:fp, "d")
+        call delete(a:fp, "rf") " NOTE: deletes recursively
         echohl Identifier
         echo "\nSuccessfully deleted directory " . a:fp
     else
