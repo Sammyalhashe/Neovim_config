@@ -2,6 +2,7 @@
 let g:default_agenda_dir = get(g:, 'default_agenda_dir', "~/.config/nvim/vim-agenda/")
 let g:default_agenda_file = get(g:, 'default_agenda_file', "agenda.md")
 let g:expanded_default_agenda_dir = glob(g:default_agenda_dir)
+set autoread
 
 " TODO: add an 'ALL' option
 let g:TODO_DICT = {
@@ -174,6 +175,7 @@ endfunction
 " congregates requested agenda type in a buffer (or file?)
 " TODO: Figure out how to update the buffer if it is already open (maybe edit!)
 function! CongregateAgenda(type) abort
+    let l:currBuffer = bufnr('%') " NOTE: '%' means current buffer
     let l:lines = ReadAgenda(a:type)
     let l:file = g:expanded_default_agenda_dir . g:default_agenda_file
     if (filereadable(l:file))
@@ -185,6 +187,9 @@ function! CongregateAgenda(type) abort
         let l:subs = substitute(item[0], g:expanded_default_agenda_dir, "", "")
         call AppendProjectToFile(l:file, l:subs, item[1])
     endfor
+    if bufname(l:currBuffer) == g:expanded_default_agenda_dir . g:default_agenda_file
+        checktime
+    endif
 endfunction
 
 " function to open a project file in a new buffer
@@ -192,9 +197,26 @@ function! OpenFile(fp) abort
     execute "rightbelow vsplit " . a:fp
 endfunction
 
+function! AgendaBufferNum() abort
+    let l:all = range(0, bufnr('$')) "'$' means the last buffer
+    for b in l:all
+        if bufname(b) == g:expanded_default_agenda_dir . g:default_agenda_file
+            return b
+        endif
+    endfor
+    return -1
+endfunction
+
 " function to open the agenda file in a new buffer
 function! OpenAgenda() abort
-    execute "rightbelow vsplit " . g:expanded_default_agenda_dir . g:default_agenda_file
+    let l:bIdx = AgendaBufferNum()
+    echo l:bIdx
+    if l:bIdx == -1 || l:bIdx == 0
+        execute "rightbelow vsplit! " . g:expanded_default_agenda_dir . g:default_agenda_file
+    else
+        let fname = bufname(l:bIdx)
+        edit! "" . fname
+    endif
 endfunction
 
 " Creates a Project Directory
@@ -300,6 +322,7 @@ function! EditProject() abort
             let l:fileName = input("Enter file name: ")
             call inputrestore()
             call CreateFileIfNotExists(l:projectPathChosen . "/" . l:fileName)
+            call OpenFile(l:projectPathChosen . "/" . l:fileName)
             return
         endif
         call inputrestore()
@@ -350,7 +373,6 @@ function! DeleteProject() abort
         echo "Cancelled"
     endif
 endfunction
-
 
 autocmd BufWritePost * call CongregateAgenda(1)
 command! -nargs=0 OpenAgenda call OpenAgenda()
