@@ -49,6 +49,18 @@ function! CreateDirectoryIfNotExists(fp) abort
     endif
 endfunction
 
+" Creates a file if it doesn't already exist
+function! CreateFileIfNotExists(fp) abort
+    if empty(glob(a:fp))
+        " TODO: Add compatibility with DOS
+        call system("touch " . a:fp)
+        " NOTE: I like the above better than the above
+        " execute '!touch ' . a:fp 
+        return
+    endif
+    echo "Not Created"
+endfunction
+
 " Deletes a directory if it exists
 function DeleteDirectoryIfExists(fp) abort
     if (isdirectory(a:fp)) 
@@ -62,7 +74,7 @@ function DeleteDirectoryIfExists(fp) abort
 endfunction
 
 " create the agenda folder if it doesn't exist
-call CreateDirectoryIfNotExists(g:default_agenda_dir)
+call CreateDirectoryIfNotExists(g:expanded_default_agenda_dir)
 
 " Scan over the directory and recursively obtain filepaths
 function! GetAgendaFilesAt(startingDir) abort
@@ -132,7 +144,10 @@ function! ScanAgendaFiles(agendaFiles, type) abort
     for file in a:agendaFiles
         " scan the files for text
         " let the lines be indexed by the file
-        let l:filteredFiles[file] = ScanFile(file, a:type)
+        let l:tmp = ScanFile(file, a:type)
+        if len(l:tmp) != 0
+            let l:filteredFiles[file] = l:tmp
+        endif
     endfor
     return l:filteredFiles
 endfunction
@@ -164,7 +179,7 @@ function! CongregateAgenda(type) abort
     if (filereadable(l:file))
         silent echo "delete " . l:file
         call DeleteFile(l:file)
-        call writefile([""], l:file)
+        call writefile([""], l:file) " NOTE: May be able to replace this with CreateFileIfNotExists()
     endif
     for item in items(l:lines)
         let l:subs = substitute(item[0], g:expanded_default_agenda_dir, "", "")
@@ -230,8 +245,33 @@ function! AddSubModule() abort
     let l:projectPathChosen = l:copy[l:projectIdx - 1]
     call inputsave()
     let l:subModuleName = input("Enter submodule name: ")
-    call CreateDirectoryIfNotExists(l:projectPathChosen . "/" . l:subModuleName)
     call inputrestore()
+    call CreateDirectoryIfNotExists(l:projectPathChosen . "/" . l:subModuleName)
+endfunction
+
+" function adds new files to the project
+function! AddToProject() abort
+    let l:lettersChosen = []
+    " DONE: grab the projects and separate them by newLines 
+    let l:projectPaths = GetProjectPaths(g:expanded_default_agenda_dir)
+    let l:copy = copy(l:projectPaths)
+    let l:subs = map(l:projectPaths, 'substitute(v:val, g:expanded_default_agenda_dir, "", "")')
+    " NOTE: add Cancel option
+    call add(l:subs, "Cancel")
+    " TODO: add '&' to word after the last '/'
+    let l:subs = map(l:subs, {_, val -> SplitAndAddCharToLast(val, "/", "&", l:lettersChosen)})
+    let l:shortenedProjectPaths = join(l:subs, "\n")
+    let l:projectIdx = confirm("Enter the project to edit: ", l:shortenedProjectPaths, "Question")
+    if l:projectIdx == len(l:subs)
+        echohl WarningMsg
+        echo "Cancelled"
+        return
+    endif
+    let l:projectPathChosen = l:copy[l:projectIdx - 1]
+    call inputsave()
+    let l:fileName = input("Enter file name: ")
+    call inputrestore()
+    call CreateFileIfNotExists(l:projectPathChosen . "/" . l:fileName)
 endfunction
 
 function! EditProject() abort
@@ -253,6 +293,17 @@ function! EditProject() abort
     endif
     let l:projectPathChosen = l:copy[l:projectIdx - 1]
     let l:projectFiles = GetAgendaFilesAt(l:projectPathChosen)
+    if len(l:projectFiles) == 0
+        call inputsave()
+        if confirm("This project has no files, would you like to create one? ", "&Yes\n&No", "Question") == 1
+            call inputsave()
+            let l:fileName = input("Enter file name: ")
+            call inputrestore()
+            call CreateFileIfNotExists(l:projectPathChosen . "/" . l:fileName)
+            return
+        endif
+        call inputrestore()
+    endif
     let l:copy2 = copy(l:projectFiles)
     let l:fileNames = map(l:projectFiles, 'substitute(v:val, g:expanded_default_agenda_dir, "", "")')
     " NOTE: add Cancel option
@@ -306,3 +357,4 @@ command! -nargs=0 OpenAgenda call OpenAgenda()
 command! -nargs=0 DeleteProject call DeleteProject()
 command! -nargs=0 EditProject call EditProject()
 command! -nargs=0 AddSubModule call AddSubModule()
+command! -nargs=0 AddToProject call AddToProject()
