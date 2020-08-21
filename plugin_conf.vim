@@ -604,7 +604,3 @@ exec printf("source %s/%s", g:config_location, "/NeovimTerm.vim")
 exec printf("source %s/%s", g:config_location, "/vim_todo_highlight.vim")
 " }}}1
 
-" agenda.vim {{{1
-exec printf("source %s/%s", g:config_location, "/agenda.vim")
-" }}}1
-

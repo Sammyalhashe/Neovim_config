@@ -3,7 +3,7 @@ nnoremap <leader>ag :Ag!<CR>
 nnoremap <leader>li :Lines<CR>
 
 " FZF {{{
-let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+" let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 function! FloatingFZF()
   let buf = nvim_create_buf(v:false, v:true)
   call setbufvar(buf, '&signcolumn', 'no')

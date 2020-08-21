@@ -63,6 +63,7 @@ function! DoRemote(arg)
 endfunction
 
 " Miscellaneous Plugins {{{2
+Plug 'https://gitlab.com/Sammyalhashe/sammys-vim-agenda'
 Plug 'sakshamgupta05/vim-todo-highlight'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mhinz/vim-startify'
