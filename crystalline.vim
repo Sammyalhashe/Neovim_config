@@ -66,7 +66,7 @@ if g:os == 'Darwin'
         let g:crystalline_theme = 'nord'
     elseif g:my_colorscheme == "gruvbox"
         let g:crystalline_theme = "gruvbox"
-    elseif g:my_colorscheme == "solarized8"
+    elseif g:my_colorscheme =~ "solarized8" 
         let g:crystalline_theme = "solarized"
     else
         let g:crystalline_theme = "dracula"

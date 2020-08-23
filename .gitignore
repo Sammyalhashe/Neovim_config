@@ -1,3 +1,7 @@
 plugged/
 vim-agenda/
 .DS_Store
+.netrwhist
+mymacs/
+.git/
+Fonts/

@@ -21,7 +21,7 @@ endif
 
 if g:os == 'Darwin'
     let g:config_location = "~/.config/nvim"
-    let g:my_colorscheme = "gruvbox"
+    let g:my_colorscheme = "one"
 elseif g:os == 'Linux'
     let g:config_location = "~/.config/nvim"
     let g:my_colorscheme = "NeoSolarized"
@@ -63,7 +63,7 @@ function! DoRemote(arg)
 endfunction
 
 " Miscellaneous Plugins {{{2
-Plug 'https://gitlab.com/Sammyalhashe/sammys-vim-agenda'
+Plug '~/Documents/sammys-vim-agenda/'
 Plug 'sakshamgupta05/vim-todo-highlight'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mhinz/vim-startify'
@@ -82,11 +82,6 @@ Plug 'tpope/vim-commentary'
 
 " gitgutter for vim
 Plug 'airblade/vim-gitgutter'
-
-" Nerdtree related plugins
-Plug 'ryanoasis/vim-devicons'
-Plug 'scrooloose/nerdtree'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " Git client
 Plug 'tpope/vim-fugitive'

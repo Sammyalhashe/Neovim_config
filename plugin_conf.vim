@@ -133,6 +133,7 @@ set magic
 
 " Show matching brackets when text indicator is over them
 set showmatch
+
 " How many tenths of a second to blink when matching brackets
 set mat=2
 
@@ -178,11 +179,7 @@ endif
 syntax enable
 
 let g:vim_monokai_tasty_italic = 1
-let g:material_theme_style = 'darker' " palenight
-let g:material_terminal_italics = 1
-let g:neosolarized_bold = 1
-let g:neosolarized_underline = 1
-let g:neosolarized_italic = 1
+
 " Enable 256 colors palette in Gnome Terminal
 if $COLORTERM == 'gnome-terminal'
     set t_Co=256
@@ -196,7 +193,6 @@ if g:os == 'Linux'
     exec printf("colorscheme %s", g:my_colorscheme)
 endif
 
-let g:bg_tango = 1
 " }}}1
 
 " => Files, backups and undo {{{1
@@ -229,6 +225,28 @@ set nowrap " don't Wrap lines
 " => Visual mode related {{{1
 " Visual mode pressing * or # searches for the current selection
 " Super useful! From an idea by Michael Naumann
+function! CmdLine(str)
+    call feedkeys(":" . a:str)
+endfunction
+
+
+function! VisualSelection(direction, extra_filter) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", "\\/.*'$^~[]")
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'gv'
+        call CmdLine("Ack '" . l:pattern . "' " )
+    elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
+
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 " }}}1
@@ -322,14 +340,6 @@ map <leader>s? z=
 
 " => Helper functions {{{1
 
-" Returns true if paste mode is enabled
-function! HasPaste()
-    if &paste
-        return 'PASTE MODE  '
-    endif
-    return ''
-endfunction
-
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
 function! <SID>BufcloseCloseIt()
@@ -351,26 +361,6 @@ function! <SID>BufcloseCloseIt()
     endif
 endfunction
 
-function! CmdLine(str)
-    call feedkeys(":" . a:str)
-endfunction
-
-function! VisualSelection(direction, extra_filter) range
-    let l:saved_reg = @"
-    execute "normal! vgvy"
-
-    let l:pattern = escape(@", "\\/.*'$^~[]")
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
-
-    if a:direction == 'gv'
-        call CmdLine("Ack '" . l:pattern . "' " )
-    elseif a:direction == 'replace'
-        call CmdLine("%s" . '/'. l:pattern . '/')
-    endif
-
-    let @/ = l:pattern
-    let @" = l:saved_reg
-endfunction
 " }}}1
 
 " python version {{{1
@@ -409,10 +399,6 @@ au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
-" }}}1
-
-" NerdTree {{{1
-source ~/.config/nvim/nerdtree.vim
 " }}}1
 
 "Typescript {{{1
@@ -477,6 +463,12 @@ let g:gitgutter_sign_modified_removed = '╋━'
 
 " Plugin key-mappings.
 
+" netrw {{{1
+nnoremap <Leader>y :Vexplore<CR>
+let g:netrw_liststyle = 3
+let g:netrw_winsize = 25
+" }}}1
+
 " ctrlp {{{1
 " exec printf("source %s/%s", g:config_location, "ctrlp.vim")
 " }}}1
@@ -534,18 +526,6 @@ exec printf("source %s/%s", g:config_location, "ale_config.vim")
 let g:vim_jsx_pretty_colorful_config = 1
 " }}}1
 
-" vim-devicons {{{1
-let g:webdevicons_enable = 1
-" adding the flags to NERDTree
-"let g:webdevicons_enable_nerdtree = 1
-" adding to vim-airline's statusline
-let g:webdevicons_enable_airline_statusline = 1
-let g:WebDevIconsOS = 'Darwin'
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {} " needed
-let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['class'] = '💎'
-let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-" }}}1
-
 " match tags always plugin {{{1
 let g:mta_filetypes = {
             \ 'html' : 1,
@@ -590,10 +570,6 @@ exec printf("source %s/%s", g:config_location, "/random_colorscheme_config.vim")
 
 " coc config {{{1
 exec printf('source %s/%s', "~/.config/nvim/", 'coc_config.vim')
-" }}}1
-
-" highlighting config {{{1
-exec printf('source %s/%s', "~/.config/nvim/", 'highlighting.vim')
 " }}}1
 
 " TermSplit config {{{1
