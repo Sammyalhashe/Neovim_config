@@ -6,7 +6,7 @@
 "                 | |   | || |  | |   _   | | _ | |                   "
 "                 | |   | | \ \/ /   | |  | || || |                   "
 "                 | |   | |  \  /   _| |_ | || || |                   "
-"                 |_|   |_|   \/   (_____)|_||_||_| config            " 
+"                 |_|   |_|   \/   (_____)|_||_||_| config            "
 "====================================================================="
 
 " Set the os {{{1
@@ -21,7 +21,7 @@ endif
 
 if g:os == 'Darwin'
     let g:config_location = "~/.config/nvim"
-    let g:my_colorscheme = "one"
+    let g:my_colorscheme = "gruvbox"
 elseif g:os == 'Linux'
     let g:config_location = "~/.config/nvim"
     let g:my_colorscheme = "NeoSolarized"
@@ -63,6 +63,7 @@ function! DoRemote(arg)
 endfunction
 
 " Miscellaneous Plugins {{{2
+Plug 'jceb/vim-orgmode'
 Plug '~/Documents/sammys-vim-agenda/'
 Plug 'sakshamgupta05/vim-todo-highlight'
 Plug 'christoomey/vim-tmux-navigator'
@@ -94,7 +95,7 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 
 " asynchrounous linting engine
-Plug 'w0rp/ale'
+" Plug 'w0rp/ale'
 " Plug 'neomake/neomake'
 
 " statusline
@@ -108,6 +109,7 @@ Plug 'kien/rainbow_parentheses.vim'
 
 " Color schemes {{{2
 " Plug 'patstockwell/vim-monokai-tasty'
+Plug 'https://gitlab.com/yorickpeterse/vim-paper.git'
 Plug 'liuchengxu/space-vim-theme'
 Plug 'rakr/vim-one'
 Plug 'lifepillar/vim-solarized8'
@@ -126,10 +128,13 @@ Plug 'Shougo/context_filetype.vim'
 " }}}2
 
 " Autocomplete {{{2
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " Plug 'Shougo/deoplete-lsp'
-" Plug 'neovim/nvim-lsp'
+Plug 'neovim/nvim-lsp'
+Plug 'nvim-lua/completion-nvim'
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
 " }}}2
 
 " Language plugins {{{2
@@ -167,7 +172,6 @@ Plug 'leafgarland/typescript-vim'
 " }}}2
 call plug#end()
 " }}}1
-
 
 " Sourcing other files {{{1
 source ~/.config/nvim/plugin_conf.vim

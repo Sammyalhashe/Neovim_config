@@ -2,7 +2,7 @@
 # Chess/ncurses.md
 DONE: Figure out why the tui is flashing and disapearing
 TODO: Figure out how to properly create and handle subwindows
-NOTE: Command for help `:vert h Man subwin`
+NOTE: It seems that calling the box() method a couple of times causes seg faults
 NOTE: Command for help `:vert h Man subwin`
 
 

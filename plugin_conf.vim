@@ -1,6 +1,11 @@
 " vim: foldmethod=marker
 
 " Defaults {{{1
+
+" allow sourcing of local rc files
+set exrc
+set secure
+
 set nocompatible
 
 filetype plugin on
@@ -120,7 +125,7 @@ set ignorecase
 set smartcase
 
 " Highlight search results
-set hlsearch
+" set hlsearch
 
 " Makes search act like search in modern browsers
 set incsearch
@@ -166,7 +171,7 @@ if has('termguicolors')
 endif
 
 if g:os == 'Darwin'
-    set background=dark
+    set background=light
 else
     set background=light
 endif
@@ -569,7 +574,8 @@ exec printf("source %s/%s", g:config_location, "/random_colorscheme_config.vim")
 " }}}1
 
 " coc config {{{1
-exec printf('source %s/%s', "~/.config/nvim/", 'coc_config.vim')
+" exec printf('source %s/%s', "~/.config/nvim/", 'coc_config.vim')
+exec printf('source %s/%s', "~/.config/nvim/", 'lsp.vim')
 " }}}1
 
 " TermSplit config {{{1

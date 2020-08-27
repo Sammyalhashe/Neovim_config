@@ -1,14 +1,21 @@
 let g:deoplete#enable_at_startup = 1
 set completeopt-=preview
-let g:deoplete#enable_ignore_case = 1
+" Set completeopt to have a better completion experience
+set completeopt=menuone,noinsert,noselect
+
+" Avoid showing message extra message when using completion
+set shortmess+=c
 "let g:deoplete#omni_patterns = {}
 "let g:deoplete#omni_patterns.java = '[^. *\t]\.\w*'
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#enable_camel_case = 1
-let g:deoplete#enable_refresh_always = 1
-let g:deoplete#max_abbr_width = 0
-let g:deoplete#max_menu_width = 0
-let g:deoplete#omni#input_patterns = get(g:,"deoplete#omni#input_patterns",{})
+call deoplete#custom#option({
+        \ 'smart_case': v:true,
+        \ 'camel_case': v:true,
+        \ 'refresh_always': v:true,
+        \ 'max_abbr_width': 0,
+        \ 'max_menu_width': 0,
+        \ 'ignore_casee': v:true
+        \ })
+let g:deoplete#omni#custom_var = get(g:,"deoplete#omni#custom#var()",{})
 let g:deoplete#sources#ternjs#filetypes = [
             \ 'jsx',
             \ 'javascript.jsx',

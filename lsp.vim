@@ -34,7 +34,7 @@ local default_callback = vim.lsp.callbacks[method]
 
 
 -- NOTE: jdtls isn't defined for this solution. Just use emacs
-local servers = {'pyls', 'tsserver', 'vimls', 'clangd'}
+local servers = {'pyls', 'tsserver', 'vimls', 'clangd', 'bashls'}
 for _, lsp in ipairs(servers) do
     nvim_lsp[lsp].setup {
       on_attach = on_attach,
@@ -72,4 +72,34 @@ function s:smart_carriage_return()
    endif
 endfunction
 
+autocmd BufEnter * lua require'completion'.on_attach()
+" Use <Tab> and <S-Tab> to navigate through popup menu
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <silent><expr> <c-p> completion#trigger_completion() " map <c-p> to manually trigger completion
+" Set completeopt to have a better completion experience
+set completeopt=menuone,noinsert,noselect
 
+" Avoid showing message extra message when using completion
+set shortmess+=c
+
+let g:completion_confirm_key = ""
+imap <expr> <cr>  pumvisible() ? complete_info()["selected"] != "-1" ?
+                 \ "\<Plug>(completion_confirm_completion)"  : "\<c-e>\<CR>" :  "\<CR>"
+let g:completion_enable_snippet = 'Neosnippet'
+
+
+" Plugin key-mappings.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif

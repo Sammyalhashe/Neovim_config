@@ -16,7 +16,7 @@ function! StatusDiagnostic() abort
   if get(info, 'warning', 0)
     call add(msgs, 'W' . info['warning'])
   endif
-  return join(msgs, ' '). ' ' . get(g:, 'coc_status', '')
+  return join(msgs, ' '). ' ' " . get(g:, 'coc_status', '')
 endfunction
 
 function! StatusLine(current, width)
@@ -30,7 +30,7 @@ function! StatusLine(current, width)
   endif
   let l:s .= ' %f%h%w%m%r '
   if a:current
-    let l:s .= '%{fugitive#head()} ' . crystalline#right_sep('', 'Fill') . coc#status()
+    let l:s .= '%{fugitive#head()} ' . crystalline#right_sep('', 'Fill') " . coc#status()
   endif
 
   if a:current
@@ -66,7 +66,9 @@ if g:os == 'Darwin'
         let g:crystalline_theme = 'nord'
     elseif g:my_colorscheme == "gruvbox"
         let g:crystalline_theme = "gruvbox"
-    elseif g:my_colorscheme =~ "solarized8" 
+    elseif g:my_colorscheme == "paper"
+        let g:crystalline_theme = "gruvbox"
+    elseif g:my_colorscheme =~ "solarized8"
         let g:crystalline_theme = "solarized"
     else
         let g:crystalline_theme = "dracula"
