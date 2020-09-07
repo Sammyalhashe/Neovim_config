@@ -1,0 +1,568 @@
+#+TITLE: Myinit
+
+* Packages
+** Emacs config
+#+BEGIN_SRC emacs-lisp
+  (use-package emacs
+    :config
+    (defun prot/rebuild-emacs-init ()
+      "Produce Elisp init from my Org dotemacs.
+  Add this to `kill-emacs-hook', to use the newest file in the next
+  session.  The idea is to reduce startup time, though just by
+  rolling it over to the end of a session rather than the beginning
+  of it."
+      (let ((init-el "~/.emacs.d/emacs-init.el")
+            (init-org "~/.emacs.d/emacs-init.org"))
+        (when init-el
+          (delete-file init-el))
+        (org-babel-tangle-file init-org init-el)))
+    :hook ((kill-emacs-hook . prot/rebuild-emacs-init)
+           (kill-emacs-hook . package-quickstart-refresh)))
+#+END_SRC
+** Helm
+#+BEGIN_SRC emacs-lisp
+(use-package helm)
+(use-package helm-projectile
+  :config
+  (helm-projectile-on))
+;; helm-config
+(global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+(global-set-key (kbd "C-x r b") 'helm-bookmarks)
+(global-set-key (kbd "C-x x") 'helm-M-x)
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-j") 'helm-next-line)
+(define-key helm-map (kbd "C-k") 'helm-previous-line)
+(define-key helm-find-files-map (kbd "<Backspace>") 'helm-find-files-up-one-level)
+(define-key helm-map (kbd "C-z") 'helm-select-action)
+(define-key helm-map (kbd "C-v") 'display-buffer)
+#+END_SRC
+** Projectile
+#+BEGIN_SRC emacs-lisp
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  )
+#+END_SRC
+** Lsp-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode
+    :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+           (python-mode . lsp)
+           (c++-mode . lsp)
+           (java-mode . lsp))
+    :commands lsp)
+  ;; lsp mode
+  (setq lsp-signature-auto-activate nil)
+  ;; for python
+  (setq lsp-python-executable-cmd "python3")
+  (setq python-shell-interpreter "python3")
+
+  (use-package lsp-ui
+    :after lsp-mode
+    :diminish
+    :commands lsp-ui-mode
+    :custom-face
+    (lsp-ui-doc-background ((t (:background nil))))
+    (lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic)))))
+    :bind
+    (:map lsp-ui-mode-map
+          ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+          ([remap xref-find-references] . lsp-ui-peek-find-references)
+          ("C-c u" . lsp-ui-imenu)
+          ("M-i" . lsp-ui-doc-focus-frame)
+          ("C-j" . lsp-ui-peek--select-next)
+          ("C-k" . lsp-ui-peek--select-prev)
+            )
+    (:map lsp-mode-map
+          ("M-n" . forward-paragraph)
+          ("M-p" . backward-paragraph)
+          ("C-k" . 'lsp-ui-doc-glance)
+          )
+    :custom
+    (lsp-ui-doc-enable nil)
+    (lsp-ui-doc-enable ())
+    (lsp-ui-doc)
+    (lsp-ui-doc-header t)
+    ;; Whether or not to enable the header which displays the symbol string.
+    (lsp-ui-doc-include-signature t)                ;; Whether or not to include the object signature/type in the frame.
+    (lsp-ui-doc-border (face-foreground 'default))  ;; Border color of the frame
+    (lsp-ui-sideline-enable nil)                    ;; Whether or not to enable lsp-ui-sideline
+    (lsp-ui-sideline-ignore-duplicate t)            ;; Ignore duplicates when there is a same symbol with same contents
+    (lsp-ui-sideline-show-code-actions nil)         ;; Whether to show code actions in sideline.
+  )
+
+#+END_SRC
+** Evil-commenter
+#+BEGIN_SRC emacs-lisp
+(use-package evil-nerd-commenter
+  :ensure t)
+#+END_SRC
+** Evil-leader
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-leader
+    :config
+    (global-evil-leader-mode))
+  ;; evil-leader
+  (evil-leader/set-leader "<SPC>")
+  (evil-leader/set-key
+    "e" 'helm-M-x
+    "f f" 'helm-find-files
+    "p f" 'helm-projectile-find-file
+    "p p" 'helm-projectile-switch-project
+    "f e d" 'reload-init-file
+    ;; "b" 'switch-to-buffer
+    "b" 'helm-buffers-list
+    "o t" 'treemacs
+    "g g" 'magit-status
+    "g c" 'evilnc-comment-or-uncomment-lines
+    "f b" 'lsp-format-buffer
+    "g r" 'lsp-find-references
+    "r g" 'helm-projectile-rg
+    "k" 'kill-buffer)
+#+END_SRC
+** Evil-mode
+#+BEGIN_SRC emacs-lisp
+(use-package evil
+  :config
+  ;; DONE figure out how to map normal commands like gn, gp (in vim)
+  (evil-mode 1)
+  (evil-define-key 'normal 'global "gn" 'next-buffer)
+  (evil-define-key 'normal 'global "gk" 'kill-buffer)
+  (evil-define-key 'normal 'global "gp" 'previous-buffer))
+#+END_SRC
+** yasnippets
+#+BEGIN_SRC emacs-lisp
+(use-package yasnippet
+   :config
+   (yas-global-mode 1))
+#+END_SRC
+** Auto-complete
+#+BEGIN_SRC emacs-lisp
+;; (require 'auto-complete)
+;; (require 'auto-complete-config)
+;; (ac-config-default)
+#+END_SRC
+** dap-mode
+#+BEGIN_SRC emacs-lsp
+(use-package dap-mode
+    :ensure t
+    :config
+    (dap-mode 1)
+
+    ;; The modes above are optional
+
+    (dap-ui-mode 1)
+    ;; enables mouse hover support
+    (dap-tooltip-mode 1)
+    ;; use tooltips for mouse hover
+    ;; if it is not enabled `dap-mode' will use the minibuffer.
+    (tooltip-mode 1)
+    ;; displays floating panel with debug buttons
+    ;; requies emacs 26+
+    (dap-ui-controls-mode 1))
+
+(require 'dap-python)
+(require 'dap-lldb)
+#+END_SRC
+** Company
+#+BEGIN_SRC emacs-lisp
+(use-package company
+ :ensure t
+ :config
+ (setq company-idle-delay 0.3)
+ (setq company-minimum-prefix-length 3)
+ (global-company-mode 1)
+ ;;(global-set-key (kbd "<tab>") ‘company-complete)
+)
+(with-eval-after-load 'company
+    (define-key company-active-map (kbd "<tab>") #'company-select-next)
+    (define-key company-active-map (kbd "S-<tab>") #'company-select-previous))
+#+END_SRC
+** Company-box
+#+BEGIN_SRC emacs-lisp
+(use-package company-box :hook (company-mode . company-box-mode))
+#+END_SRC
+** Company-lsp
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package company-lsp :ensure t
+  ;;   :after (lsp-mode company)
+  ;;   :defer t
+  ;;   :config
+  ;;   (progn
+  ;;     (setq company-lsp-async t)))
+#+END_SRC
+** lsp-java
+#+BEGIN_SRC
+(use-package lsp-java :ensure t :after lsp-mode
+  :hook ((java-mode . lsp-mode)
+         (java-mode . (lambda () (add-to-list (make-local-variable 'company-backends) 'company-lsp)))))
+(add-hook 'java-mode-hook (lambda ()
+        (setq c-basic-offset 4
+                tab-width 4
+                indent-tabs-mode t)))
+#+END_SRC
+** Doom Modeline
+#+BEGIN_SRC emacs-lisp
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+#+END_SRC
+** Auto-Package-Update
+#+BEGIN_SRC emacs-lisp
+(use-package auto-package-update
+  :ensure t
+  :config
+  (setq auto-package-update-delete-old-versions t)
+  (setq auto-package-update-hide-results t)
+  (auto-package-update-maybe))
+#+END_SRC
+** iedit
+#+BEGIN_SRC emacs-lisp
+(use-package iedit
+  :ensure t
+  :config
+  (define-key global-map (kbd "C-c ;") 'iedit-mode)
+)
+#+END_SRC
+** Magit
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package magit
+     ;; :ensure t
+     ;; :pin melpa)
+  (global-set-key (kbd "C-j") 'magit-next-line)
+  (global-set-key (kbd "C-k") 'magit-previous-line)
+#+END_SRC
+** Smartparens
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens
+    :ensure t
+    :config
+    (setq sp-show-pair-from-inside nil)
+    (require 'smartparens-config)
+    (sp-with-modes '(c-mode c++-mode)
+    (sp-local-pair "<" ">"))
+    :diminish smartparens-mode
+    :init
+    (add-hook 'python-mode-hook #'smartparens-strict-mode)
+    (add-hook 'java-mode-hook #'smartparens-strict-mode)
+    (add-hook 'c++-mode-hook #'smartparens-mode)
+    (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode))
+#+END_SRC
+** Google c-ctyle
+#+BEGIN_SRC emacs-lisp
+(use-package google-c-style
+  :ensure t
+  :config
+  (add-hook 'c-mode-common-hook 'google-set-c-style)
+  (add-hook 'c-mode-common-hook 'google-make-newline-indent))
+#+END_SRC
+** Smex
+#+BEGIN_SRC emacs-lisp
+(use-package smex
+  :ensure t
+  :config
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  ;; This is your old M-x.
+  (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+  )
+#+END_SRC
+** Parchment theme
+#+BEGIN_SRC emacs-lisp
+(use-package parchment-theme
+  :ensure t
+  :config (load-theme 'spacemacs-light t))
+#+END_SRC
+** Org packages
+#+BEGIN_SRC emacs-lisp
+  ;; org bullets
+  (use-package org-bullets
+  :ensure t
+  :init
+  (setq org-bullets-bullet-list
+         '("◉" "◎" "<img draggable="false" role="img" class="emoji" alt="⚫" src="https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/svg/26ab.svg">" "○" "►" "◇"))
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+  ;; org beautify theme
+  (use-package org-beautify-theme
+    :ensure t
+    )
+#+END_SRC
+** Ido
+*** enable ido
+#+BEGIN_SRC emacs-lisp
+  (setq ido-enable-flex-matching nil)
+  (setq ido-create-new-buffer 'always)
+  (setq ido-everywhere t)
+  (ido-mode 1)
+#+END_SRC
+ # may not be necessary because I already use helm
+** Avy
+#+BEGIN_SRC emacs-lisp
+  (use-package avy
+     :ensure t
+     :bind
+     ("C-s" . avy-goto-char))
+#+END_SRC
+** Rainbow
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-mode
+    :ensure t
+    :init (rainbow-mode 1))
+#+END_SRC
+** Format-all-the-code
+#+BEGIN_SRC emacs-lisp
+  (use-package format-all
+    :ensure t)
+#+END_SRC
+** Realgud (debugging)
+*** Enable Realgud
+#+BEGIN_SRC emacs-lisp
+  (use-package realgud
+    :ensure t)
+#+END_SRC
+*** LLDB integration with Realgud
+#+BEGIN_SRC emacs-lisp
+  (use-package realgud-lldb
+    :ensure t)
+#+END_SRC
+** which-key
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :config
+    (which-key-mode))
+#+END_SRC
+** hl-todo
+#+BEGIN_SRC emacs-lisp
+  (use-package hl-todo
+    :config
+    (hl-todo-mode t)
+    (setq hl-todo-keyword-faces
+        '(("TODO"   . "#FF0000")
+          ("FIXME"  . "#FF0000")
+          ("DEBUG"  . "#A020F0")
+          ("GOTCHA" . "#FF4500")
+          ("STUB"   . "#1E90FF")))
+    (define-key hl-todo-mode-map (kbd "C-c C-c p") 'hl-todo-previous)
+    (define-key hl-todo-mode-map (kbd "C-c C-c n") 'hl-todo-next)
+    (define-key hl-todo-mode-map (kbd "C-c C-c o") 'hl-todo-occur)
+    (define-key hl-todo-mode-map (kbd "C-c C-c i") 'hl-todo-insert))
+#+END_SRC
+* Defaults
+#+BEGIN_SRC emacs-lisp
+(setq inhibit-startup-message t)
+
+;; inhibit bell
+;; (setq visible-bell 1)
+(setq ring-bell-function 'ignore)
+
+;; prevent the toolbar from showing up
+(tool-bar-mode -1)
+;; disable the menu and scroll bars
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+
+;; enable ido mode
+(ido-mode 1)
+
+;; display line numbers (relative)
+(display-line-numbers-mode t)
+(setq display-line-numbers 'relative)
+
+;; highlights the current line you are on
+(global-hl-line-mode t)
+
+;; show line numbers
+(line-number-mode t)
+
+;; stop line-wrapping
+(set-default 'truncate-lines t)
+
+;; set CMD to meta key
+;; (setq mac-command-modifier 'meta)
+;; (setq mac-command-modifier 'super) ; make CMD key do Super
+#+END_SRC
+* Better Defaults
+#+BEGIN_SRC emacs-lisp
+(setq-default
+ ;; Don't use the compiled code if its the older package.
+ load-prefer-newer t
+
+ ;; Do not show the startup message.
+ inhibit-startup-message t
+
+ ;; Do not put 'customize' config in init.el; give it another file.
+ custom-file "~/.emacs.d/custom-file.el"
+
+ ;; 72 is too less for the fontsize that I use.
+ fill-column 90
+
+ ;; Use your name in the frame title. :)
+ frame-title-format (format "%s's Emacs" (capitalize user-login-name))
+
+ ;; Do not create lockfiles.
+ create-lockfiles nil
+
+ ;; Don't use hard tabs
+ indent-tabs-mode nil
+
+ ;; Emacs can automatically create backup files. This tells Emacs to put all backups in
+ ;; ~/.emacs.d/backups. More info:
+ ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Backup-Files.html
+ backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
+
+ ;; Do not autosave.
+ auto-save-default nil
+
+ ;; Allow commands to be run on minibuffers.
+ enable-recursive-minibuffers t)
+
+;; Change all yes/no questions to y/n type
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; Make the command key behave as 'meta'
+(when (eq system-type 'darwin)
+  (setq mac-command-modifier 'meta))
+
+;; `C-x o' is a 2 step key binding. `M-o' is much easier.
+(global-set-key (kbd "M-o") 'other-window)
+
+;; Delete whitespace just when a file is saved.
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; Enable narrowing commands.
+(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-page 'disabled nil)
+
+;; Display column number in mode line.
+(column-number-mode t)
+
+;; Automatically update buffers if file content on the disk has changed.
+(global-auto-revert-mode t)
+#+END_SRC
+* Enable iBuffer
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC
+* Better Interactions with X xlipboard
+#+BEGIN_SRC emacs-lisp
+(setq-default
+ ;; Makes killing/yanking interact with the clipboard.
+ x-select-enable-clipboard t
+
+ ;; To understand why this is done, read `X11 Copy & Paste to/from Emacs' section here:
+ ;; https://www.emacswiki.org/emacs/CopyAndPaste.
+ x-select-enable-primary t
+
+ ;; Save clipboard strings into kill ring before replacing them. When
+ ;; one selects something in another program to paste it into Emacs, but
+ ;; kills something in Emacs before actually pasting it, this selection
+ ;; is gone unless this variable is non-nil.
+ save-interprogram-paste-before-kill t
+
+ ;; Shows all options when running apropos. For more info,
+ ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Apropos.html.
+ apropos-do-all t
+
+ ;; Mouse yank commands yank at point instead of at click.
+ mouse-yank-at-point t)
+#+END_SRC
+* Standard Config
+** Movement and config reload
+#+BEGIN_SRC emacs-lisp
+(set-face-attribute 'default nil
+                    :family "OperatorMonoLig Nerd Font" :height 145 :weight 'normal)
+;; (load-theme 'atom-one-dark t)
+
+;; windmove for easy movement between windows (splits in vim)
+(windmove-default-keybindings 'control)
+(global-set-key (kbd "C-h")  'windmove-left)
+(global-set-key (kbd "C-l") 'windmove-right)
+(global-set-key (kbd "C-k")    'windmove-up)
+(global-set-key (kbd "C-j")  'windmove-down)
+
+;; function to reload init.el
+(defun reload-init-file ()
+  (interactive)
+  (load-file user-init-file))
+
+#+END_SRC
+** Org-mode Config
+#+BEGIN_SRC emacs-lisp
+  (setq org-hide-emphasis-markers 1)
+
+  ;; (font-lock-add-keywords 'org-mode
+  ;;                         '(("^ *\\([-]\\) "
+  ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+  ;; default org directory
+  (setq org-directory "~/org/")
+
+  (defun org-visit ()
+      (interactive)
+      (find-file "~/org/journal.org"))
+    (global-set-key (kbd "C-c o a") 'org-visit)
+
+  (setq org-agenda-files (quote ("~/org/")))
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages '(
+                               (C . t)
+                               (python . t)
+                               (shell . t)
+                               (haskell . t)
+                               ))
+#+END_SRC
+** EWW config
+   #+BEGIN_SRC emacs-lisp
+      ;; go backwards
+      ;; (add-hook 'eww-mode-hook '(lambda () (local-key-binding (kbd "C-c C-h") #'eww-back-url)))
+
+      ;; go forwards
+      ;; (add-hook 'eww-mode-hook '(lambda () (local-key-binding (kbd "C-c C-l") #'eww-forward-url)))
+
+     ;;(define-key 'eww-mode-map (kdb "C-c C-l") 'eww-forward-url)
+     ;; (define-key 'eww-mode-map (kdb "C-c C-h") 'eww-back-url)
+
+      ;; help open new eww buffers (and new eww session)
+      (defun my-eww-new-buffer (url)
+        "Like `eww', but fetch URL in a new EWW buffer."
+        (interactive (advice-eval-interactive-spec (cadr (interactive-form 'eww))))
+        (let ((eww-suggest-uris (list (lambda () url))))
+          (eww-open-in-new-buffer)))
+
+      ;; remap what 'eww-open-in-new-buffer' does in eww-mode
+      (with-eval-after-load 'eww
+        (define-key eww-mode-map [remap eww-open-in-new-buffer] #'my-eww-new-buffer))
+
+     ;; make emacs always use its own browser for opening URL links
+     (setq browse-url-browser-function 'eww-browse-url)
+   #+END_SRC
+* Config edit/reload
+*** Edit
+#+BEGIN_SRC emacs-lisp
+  (defun config-visit ()
+    (interactive)
+    (find-file "~/.emacs.d/myinit.org"))
+  (global-set-key (kbd "C-c e") 'config-visit)
+#+END_SRC
+*** Reload
+#+BEGIN_SRC emacs-lisp
+  (defun config-reload ()
+    (interactive)
+    (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org")))
+  (global-set-key (kbd "C-c r") 'config-reload)
+#+END_SRC
+* Compilation commands
+** c++
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<f5>") (lambda ()
+                                 (interactive)
+                                 (setq-local compilation-read-command nil)
+                                 (call-interactively 'compile)))
+#+END_SRC

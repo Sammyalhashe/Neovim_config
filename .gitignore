@@ -5,3 +5,4 @@ vim-agenda/
 mymacs/
 .git/
 Fonts/
+*.el

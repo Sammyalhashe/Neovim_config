@@ -1,6 +1,8 @@
 " vim: foldmethod=marker
 
 " Defaults {{{1
+" set hidden so we don't have to save to switch buffers
+set hidden
 
 " allow sourcing of local rc files
 set exrc
@@ -215,8 +217,8 @@ set expandtab
 set smarttab
 
 " 1 tab == 4 spaces
-set shiftwidth=4
-set tabstop=4
+set shiftwidth=2
+set tabstop=2
 
 " Linebreak on 500 characters
 set lbr
@@ -317,6 +319,13 @@ nmap ∆ mz:m+<cr>`z
 nmap ˚ mz:m-2<cr>`z
 vmap ∆ :m'>+<cr>`<my`>mzgv`yo`z
 vmap ˚ :m'<-2<cr>`>my`<mzgv`yo`z
+
+" jump to the previous function
+nnoremap <silent> [f :call
+\ search('\(\(if\\|for\\|while\\|switch\\|catch\)\_s*\)\@64<!(\_[^)]*)\_[^;{}()]*\zs{', "bw")<CR>
+" jump to the next function
+nnoremap <silent> ]f :call
+\ search('\(\(if\\|for\\|while\\|switch\\|catch\)\_s*\)\@64<!(\_[^)]*)\_[^;{}()]*\zs{', "w")<CR>
 
 " Delete trailing white space on save, useful for some filetypes ;)
 fun! CleanExtraSpaces()
@@ -562,7 +571,7 @@ let g:closetag_filenames = "*.html,*html+,*.xhtml,*.phtml,*.php,*.jsx,*.tsx,*.js
 " }}}1
 
 " pydocstring {{{1
-nmap <silent> <c-o> <Plug>(pydocstring)
+nmap <silent> <c-d> <Plug>(pydocstring)
 " }}}1
 
 " JsDoc config {{{1

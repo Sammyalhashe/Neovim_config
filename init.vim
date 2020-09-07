@@ -63,6 +63,7 @@ function! DoRemote(arg)
 endfunction
 
 " Miscellaneous Plugins {{{2
+Plug 'tpope/vim-vinegar'
 Plug 'jceb/vim-orgmode'
 Plug '~/Documents/sammys-vim-agenda/'
 Plug 'sakshamgupta05/vim-todo-highlight'
@@ -133,8 +134,8 @@ Plug 'Shougo/context_filetype.vim'
 " Plug 'Shougo/deoplete-lsp'
 Plug 'neovim/nvim-lsp'
 Plug 'nvim-lua/completion-nvim'
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
+" Plug 'Shougo/neosnippet.vim'
+" Plug 'Shougo/neosnippet-snippets'
 " }}}2
 
 " Language plugins {{{2
