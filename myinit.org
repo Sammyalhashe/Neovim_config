@@ -548,14 +548,14 @@
 #+BEGIN_SRC emacs-lisp
   (defun config-visit ()
     (interactive)
-    (find-file "~/.emacs.d/myinit.org"))
+    (find-file "~/.config/nvim/myinit.org"))
   (global-set-key (kbd "C-c e") 'config-visit)
 #+END_SRC
 *** Reload
 #+BEGIN_SRC emacs-lisp
   (defun config-reload ()
     (interactive)
-    (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org")))
+    (org-babel-load-file (expand-file-name "~/.config/nvim/myinit.org")))
   (global-set-key (kbd "C-c r") 'config-reload)
 #+END_SRC
 * Compilation commands
