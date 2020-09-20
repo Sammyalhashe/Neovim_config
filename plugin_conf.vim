@@ -128,6 +128,7 @@ set smartcase
 
 " Highlight search results
 " set hlsearch
+set nohlsearch
 
 " Makes search act like search in modern browsers
 set incsearch
@@ -173,7 +174,7 @@ if has('termguicolors')
 endif
 
 if g:os == 'Darwin'
-    set background=light
+    set background=dark
 else
     set background=light
 endif
@@ -199,6 +200,12 @@ endif
 if g:os == 'Linux'
     exec printf("colorscheme %s", g:my_colorscheme)
 endif
+
+" enable transparency when you have a nice background image
+hi NORMAL guibg=NONE cterm=NONE
+hi Folded guibg=NONE cterm=NONE
+hi SignColumn guibg=NONE cterm=NONE
+hi StatusLine guibg=NONE cterm=NONE
 
 " }}}1
 

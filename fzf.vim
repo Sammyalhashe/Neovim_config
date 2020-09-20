@@ -1,6 +1,8 @@
 nnoremap <leader>e :GFiles<CR>
 nnoremap <leader>ag :Ag!<CR>
 nnoremap <leader>li :Lines<CR>
+nnoremap <leader>/ :BLines!<CR>
+nnoremap <leader>? :Rg!<CR>
 
 " FZF {{{
 " let g:fzf_layout = { 'window': 'call FloatingFZF()' }
