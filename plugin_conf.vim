@@ -186,6 +186,8 @@ endif
 " Enable syntax highlighting
 syntax enable
 
+set guifont=OperatorMonoLig\ Nerd\ Font
+
 let g:vim_monokai_tasty_italic = 1
 
 " Enable 256 colors palette in Gnome Terminal
@@ -202,10 +204,10 @@ if g:os == 'Linux'
 endif
 
 " enable transparency when you have a nice background image
-hi NORMAL guibg=NONE cterm=NONE
-hi Folded guibg=NONE cterm=NONE
-hi SignColumn guibg=NONE cterm=NONE
-hi StatusLine guibg=NONE cterm=NONE
+" hi NORMAL guibg=NONE cterm=NONE
+" hi Folded guibg=NONE cterm=NONE
+" hi SignColumn guibg=NONE cterm=NONE
+" hi StatusLine guibg=NONE cterm=NONE
 
 " }}}1
 

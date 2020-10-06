@@ -175,5 +175,7 @@ call plug#end()
 " }}}1
 
 " Sourcing other files {{{1
-source ~/.config/nvim/plugin_conf.vim
+if exists('g:loaded_plug')
+  source ~/.config/nvim/plugin_conf.vim
+endif
 " }}}1
