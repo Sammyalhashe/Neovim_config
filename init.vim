@@ -24,7 +24,7 @@ if g:os == 'Darwin'
     let g:my_colorscheme = "gruvbox"
 elseif g:os == 'Linux'
     let g:config_location = "~/.config/nvim"
-    let g:my_colorscheme = "NeoSolarized"
+    let g:my_colorscheme = "gruvbox"
 endif
 " }}}
 
