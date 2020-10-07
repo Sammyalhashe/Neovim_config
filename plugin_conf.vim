@@ -395,33 +395,37 @@ endif
 " }}}1
 
 " Crystalline {{{1
-exec printf("source %s/%s", g:config_location, "crystalline.vim")
+if exists('g:crystalline_mode_labels')
+  exec printf("source %s/%s", g:config_location, "crystalline.vim")
+endif
 " }}}1
 
 " Rainbow Parentheses {{{1
-let g:rbpt_colorpairs = [
-            \ ['brown',       'RoyalBlue3'],
-            \ ['Darkblue',    'SeaGreen3'],
-            \ ['darkgray',    'DarkOrchid3'],
-            \ ['darkgreen',   'firebrick3'],
-            \ ['darkcyan',    'RoyalBlue3'],
-            \ ['darkred',     'SeaGreen3'],
-            \ ['darkmagenta', 'DarkOrchid3'],
-            \ ['brown',       'firebrick3'],
-            \ ['gray',        'RoyalBlue3'],
-            \ ['black',       'SeaGreen3'],
-            \ ['darkmagenta', 'DarkOrchid3'],
-            \ ['Darkblue',    'firebrick3'],
-            \ ['darkgreen',   'RoyalBlue3'],
-            \ ['darkcyan',    'SeaGreen3'],
-            \ ['darkred',     'DarkOrchid3'],
-            \ ['red',         'firebrick3'],
-            \ ]
-let g:rbpt_max = 16
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
+if exists('g:rbpt_colorpairs')
+  let g:rbpt_colorpairs = [
+              \ ['brown',       'RoyalBlue3'],
+              \ ['Darkblue',    'SeaGreen3'],
+              \ ['darkgray',    'DarkOrchid3'],
+              \ ['darkgreen',   'firebrick3'],
+              \ ['darkcyan',    'RoyalBlue3'],
+              \ ['darkred',     'SeaGreen3'],
+              \ ['darkmagenta', 'DarkOrchid3'],
+              \ ['brown',       'firebrick3'],
+              \ ['gray',        'RoyalBlue3'],
+              \ ['black',       'SeaGreen3'],
+              \ ['darkmagenta', 'DarkOrchid3'],
+              \ ['Darkblue',    'firebrick3'],
+              \ ['darkgreen',   'RoyalBlue3'],
+              \ ['darkcyan',    'SeaGreen3'],
+              \ ['darkred',     'DarkOrchid3'],
+              \ ['red',         'firebrick3'],
+              \ ]
+  let g:rbpt_max = 16
+  au VimEnter * RainbowParenthesesToggle
+  au Syntax * RainbowParenthesesLoadRound
+  au Syntax * RainbowParenthesesLoadSquare
+  au Syntax * RainbowParenthesesLoadBraces
+endif
 " }}}1
 
 "Typescript {{{1
@@ -497,7 +501,9 @@ let g:netrw_winsize = 25
 " }}}1
 
 " fzf {{{1
-exec printf("source %s/%s", g:config_location, "fzf.vim")
+if filereadable(expand("~/.config/nvim/plugged/fzf.vim/plugin/fzf.vim"))
+  exec printf("source %s/%s", g:config_location, "fzf.vim")
+endif
 " }}}1
 
 " vim-markdown {{{1
@@ -510,39 +516,41 @@ set cmdheight=1
 " }}}1
 
 " Neoformat {{{1
-nnoremap <leader>nf :call Nf()<CR>
-" autocmd BufWritePost * silent call Nf()
+if filereadable(expand("~/.config/nvim/plugged/plugin/neoformat.vim"))
+  nnoremap <leader>nf :call Nf()<CR>
+  " autocmd BufWritePost * silent call Nf()
 
-let g:neoformat_javascriptreact_prettier = {
-      \ 'exe': 'prettier',
-      \ 'args': ['--write'],
-      \ 'replace': 1
-      \ }
+  let g:neoformat_javascriptreact_prettier = {
+        \ 'exe': 'prettier',
+        \ 'args': ['--write'],
+        \ 'replace': 1
+        \ }
 
-function! Nf()
-    if &filetype == 'python'
-        :Neoformat yapf
-    elseif &filetype == 'javascriptreact' || 'typescript' || 'javascript'
-        :Neoformat prettier
-    else
-        :Neoformat
-    endif
-endfunction
+  function! Nf()
+      if &filetype == 'python'
+          :Neoformat yapf
+      elseif &filetype == 'javascriptreact' || 'typescript' || 'javascript'
+          :Neoformat prettier
+      else
+          :Neoformat
+      endif
+  endfunction
 
-" command to create new file
-command! -nargs=1 Nf call s:NewFile(<q-args>)
+  " command to create new file
+  command! -nargs=1 Nf call s:NewFile(<q-args>)
 
-function! s:NewFile(fp)
-    echom a:fp
-    execute "e " . expand("%:h") . "/" . a:fp
-endfunction
+  function! s:NewFile(fp)
+      echom a:fp
+      execute "e " . expand("%:h") . "/" . a:fp
+  endfunction
 
-let g:neoformat_try_formatprg = 1
+  let g:neoformat_try_formatprg = 1
+endif
 " }}}1
 
 " ale | neomake {{{1
 " exec printf("source %s/%s", g:config_location, "neomake.vim")
-exec printf("source %s/%s", g:config_location, "ale_config.vim")
+" exec printf("source %s/%s", g:config_location, "ale_config.vim")
 " }}}1
 
 " vim-jsx-pretty {{{1
@@ -560,19 +568,20 @@ let g:mta_filetypes = {
 " }}}1
 
 " Startify {{{1
+if filereadable(expand("~/.config/nvim/plugged/vim-startify/plugin/startify.vim"))
+  let g:startify_custom_header = [
+              \ '                                ',
+              \ '            __                  ',
+              \ '    __  __ /\_\    ___ ___      ',
+              \ '   /\ \/\ \\/\ \ /'' __` __`\   ',
+              \ '   \ \ \_/ |\ \ \/\ \/\ \/\ \   ',
+              \ '    \ \___/  \ \_\ \_\ \_\ \_\  ',
+              \ '     \/__/    \/_/\/_/\/_/\/_/  ',
+              \ ]
 
-let g:startify_custom_header = [
-            \ '                                ',
-            \ '            __                  ',
-            \ '    __  __ /\_\    ___ ___      ',
-            \ '   /\ \/\ \\/\ \ /'' __` __`\   ',
-            \ '   \ \ \_/ |\ \ \/\ \/\ \/\ \   ',
-            \ '    \ \___/  \ \_\ \_\ \_\ \_\  ',
-            \ '     \/__/    \/_/\/_/\/_/\/_/  ',
-            \ ]
-
-let g:antigram = ['"A volunteer fireman" is an anagram for "I never run to a flame"']
-let g:startify_custom_header = g:startify_custom_header + startify#fortune#boxed() + g:antigram
+  let g:antigram = ['"A volunteer fireman" is an anagram for "I never run to a flame"']
+  let g:startify_custom_header = g:startify_custom_header + startify#fortune#boxed() + g:antigram
+endif
 " }}}1
 
 " closetag {{{1
@@ -580,20 +589,28 @@ let g:closetag_filenames = "*.html,*html+,*.xhtml,*.phtml,*.php,*.jsx,*.tsx,*.js
 " }}}1
 
 " pydocstring {{{1
-nmap <silent> <c-d> <Plug>(pydocstring)
+if filereadable(expand("~/.config/nvim/plugged/vim-pydocstring/autoload/pydocstring.vim"))
+  nmap <silent> <c-d> <Plug>(pydocstring)
+endif
 " }}}1
 
 " JsDoc config {{{1
-exec printf("source %s/%s", g:config_location, "/jsdoc.vim")
+if filereadable(expand("~/.config/nvim/plugged/vim-jsdoc/autoload/jsdoc.vim"))
+  exec printf("source %s/%s", g:config_location, "/jsdoc.vim")
+endif
 " }}}1
 
 " random_colorscheme config {{{1
-exec printf("source %s/%s", g:config_location, "/random_colorscheme_config.vim")
+if exists('g:random_scheme')
+  exec printf("source %s/%s", g:config_location, "/random_colorscheme_config.vim")
+endif
 " }}}1
 
 " coc config {{{1
 " exec printf('source %s/%s', "~/.config/nvim/", 'coc_config.vim')
-exec printf('source %s/%s', "~/.config/nvim/", 'lsp.vim')
+if filereadable(expand("~/.config/nvim/plugged/nvim-lsp/plugin/nvim_lsp.vim"))
+  exec printf('source %s/%s', "~/.config/nvim/", 'lsp.vim')
+endif
 " }}}1
 
 " TermSplit config {{{1
@@ -601,6 +618,8 @@ exec printf("source %s/%s", g:config_location, "/NeovimTerm.vim")
 " }}}1
 
 " vim-todo-highlight {{{1
-exec printf("source %s/%s", g:config_location, "/vim_todo_highlight.vim")
+if filereadable(expand("~/.config/nvim/plugged/vim-todo-highlight/plugin/tod_highlight.vim"))
+  exec printf("source %s/%s", g:config_location, "/vim_todo_highlight.vim")
+endif
 " }}}1
 
