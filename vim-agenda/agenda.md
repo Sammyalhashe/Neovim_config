@@ -1,27 +1,28 @@
 
 # Chess/ncurses.md
 DONE: Figure out why the tui is flashing and disapearing
-TODO: Figure out how to properly create and handle subwindows
-These will be used to represent squares inside of a general "Board" window
+DONE: Figure out how to properly create and handle subwindows
 NOTE: It seems that calling the box() method a couple of times causes seg faults
 NOTE: Command for help `:vert h Man subwin`
+OPTIMIZE: test
 
 
 
-# DailyPlanner/DailyPlans.md
-TODO: Read that functor post finally
-TODO: After Functor post, read the Monad one
-DONE: Change vim-agenda to delete buffer when leaving an agenda file
-NOTE: asdf
-TODO: Add gitlab credentials to vim-fugitive
-TODO: Decide on when you are leaving to New York
-TODO: Fix file not found error in vim-agenda
+# vim-agenda/syntax_highlighting/make_dedicated_ft_have_custom_features.md
+TODO: write function that retrieves the col nr of the first TODO/DONE/... if it exists
+TODO: use the result of that to replace with whatever word you need (use key combinations in normal mode maybe?)
+
+
+
+# vim-agenda/syntax_highlighting/syntax_highlighting.md
+TODO: make a dedicated filetype which you set as autoread
+DONE: test
 
 
 
 # vim-agenda/vim-agenda.md
-DONE: organize files into standard vim plugin mode
-NOTE: Add an `autocmd` where if the standard agenda is closed, the buffer is also deleted
+TODO: organize files into standard vim plugin mode
+DONE: Add an `autocmd` where if the standard agenda is closed, the buffer is also deleted
 DONE: update the regex to it recognizes bullet points and keeps only the text
 TODO: ask the user whether they would like to look for TODO, DONE, or ALL
 

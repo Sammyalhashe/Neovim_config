@@ -607,10 +607,10 @@ endif
 " }}}1
 
 " coc config {{{1
-" exec printf('source %s/%s', "~/.config/nvim/", 'coc_config.vim')
-if filereadable(expand("~/.config/nvim/plugged/nvim-lsp/plugin/nvim_lsp.vim"))
-  exec printf('source %s/%s', "~/.config/nvim/", 'lsp.vim')
-endif
+exec printf('source %s/%s', "~/.config/nvim/", 'coc_config.vim')
+" if filereadable(expand("~/.config/nvim/plugged/nvim-lsp/plugin/lspconfig.vim"))
+"   exec printf('source %s/%s', "~/.config/nvim/", 'lsp.vim')
+" endif
 " }}}1
 
 " TermSplit config {{{1

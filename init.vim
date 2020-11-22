@@ -129,11 +129,11 @@ Plug 'Shougo/context_filetype.vim'
 " }}}2
 
 " Autocomplete {{{2
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " Plug 'Shougo/deoplete-lsp'
-Plug 'neovim/nvim-lsp'
-Plug 'nvim-lua/completion-nvim'
+" Plug 'neovim/nvim-lsp'
+" Plug 'nvim-lua/completion-nvim'
 " Plug 'Shougo/neosnippet.vim'
 " Plug 'Shougo/neosnippet-snippets'
 " }}}2
